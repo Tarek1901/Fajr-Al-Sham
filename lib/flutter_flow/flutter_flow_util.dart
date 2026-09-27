@@ -31,3 +31,18 @@ class FlutterFlowDynamicModels<T extends FlutterFlowModel> {
     }
   }
 }
+
+extension ListDivideExt<T extends Widget> on List<T> {
+  List<Widget> divide(Widget separator) {
+    if (isEmpty) return [];
+    if (length == 1) return [this[0]];
+    final List<Widget> result = [];
+    for (var i = 0; i < length; i++) {
+      result.add(this[i]);
+      if (i != length - 1) {
+        result.add(separator);
+      }
+    }
+    return result;
+  }
+}
