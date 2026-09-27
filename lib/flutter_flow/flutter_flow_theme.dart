@@ -23,6 +23,15 @@ abstract class FlutterFlowTheme {
   late Color error;
   late Color info;
 
+  late Color onPrimary;
+  late Color onSecondary;
+  late Color onTertiary;
+  late Color onError;
+  late Color primaryContainer;
+  late Color secondaryContainer;
+  late Color tertiaryContainer;
+  late Color errorContainer;
+
   TextStyle get titleLarge => GoogleFonts.getFont('Inter', fontWeight: FontWeight.w500, fontSize: 22);
   TextStyle get titleMedium => GoogleFonts.getFont('Inter', fontWeight: FontWeight.w500, fontSize: 18);
   TextStyle get titleSmall => GoogleFonts.getFont('Inter', fontWeight: FontWeight.w500, fontSize: 16);
@@ -67,6 +76,23 @@ class LightModeTheme extends FlutterFlowTheme {
   Color error = const Color(0xFFFF5963);
   @override
   Color info = const Color(0xFFFFFFFF);
+
+  @override
+  Color onPrimary = const Color(0xFFFFFFFF);
+  @override
+  Color onSecondary = const Color(0xFFFFFFFF);
+  @override
+  Color onTertiary = const Color(0xFFFFFFFF);
+  @override
+  Color onError = const Color(0xFFFFFFFF);
+  @override
+  Color primaryContainer = const Color(0xFF4B39EF);
+  @override
+  Color secondaryContainer = const Color(0xFF39D2C0);
+  @override
+  Color tertiaryContainer = const Color(0xFFEE8B60);
+  @override
+  Color errorContainer = const Color(0xFFFF5963);
 }
 
 extension TextStyleHelper on TextStyle {
