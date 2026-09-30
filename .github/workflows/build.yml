@@ -23,10 +23,13 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Prepare Android Project & Permissions
+      - name: Prepare Android Project & Firebase
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
           flutter create . --platforms=android --project-name fajr_al_sham
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+          echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
 
       - name: Build APK
         run: flutter build apk --release
