@@ -23,7 +23,7 @@ jobs:
           flutter-version: '3.19.6'
           channel: 'stable'
 
-      - name: Prepare Code and Inject Core Utilities
+      - name: Prepare Code and Fix Imports
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
@@ -36,10 +36,10 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 1. إصلاح الاستيرادات المطلقة
+          # 1. إصلاح الاستيرادات المطلقة الخاصة بالمشروع فقط
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
 
-          # 2. إنشاء ملف الترقيع الشامل لدوال wrapWithModel و safeSetState
+          # 2. إنشاء ملف الترقيع الشامل
           mkdir -p lib/flutter_flow
           cat << 'EOF' > lib/flutter_flow/global_fixes.dart
           import 'package:flutter/material.dart';
@@ -63,7 +63,7 @@ jobs:
           }
           EOF
 
-          # 3. تجميع كافة المكونات (Components) في ملف واحد واستيراده في كل ملفات الـ components
+          # 3. تجميع كافة المكونات في ملف واحد وتصديرها
           if [ -d "lib/components" ]; then
             echo "// Export all components" > lib/components/all_components.dart
             find lib/components/ -type f -name "*.dart" ! -name "all_components.dart" | while read comp; do
@@ -72,18 +72,16 @@ jobs:
             done
           fi
 
-          # 4. حقن الترقيع واستيراد المكونات الشامل لكل ملف دارت
-          find lib/ -type f -name "*.dart" -exec bash -c '
-            for file; do
-              {
-                echo "import '\''package:fajr_al_sham/flutter_flow/global_fixes.dart'\'';"
-                if [[ "$file" == lib/components/* ]]; then
-                  echo "import '\''package:fajr_al_sham/components/all_components.dart'\'';"
-                fi
-                cat "$file"
-              } > temp && mv temp "$file"
-            done
-          ' _ {} +
+          # 4. حقن الملفات المطلوبة في أعلى الملفات الذاتية فقط
+          find lib/ -type f -name "*.dart" ! -name "global_fixes.dart" ! -name "all_components.dart" | while read file; do
+            {
+              echo "import 'package:fajr_al_sham/flutter_flow/global_fixes.dart';"
+              if [[ "$file" == lib/components/* ]]; then
+                echo "import 'package:fajr_al_sham/components/all_components.dart';"
+              fi
+              cat "$file"
+            } > temp.dart && mv temp.dart "$file"
+          done
 
           # 5. إعداد الأيقونة
           IMAGE_PATH=""
