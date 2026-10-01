@@ -6,27 +6,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
-  
-  try {
-    await initFirebase();
-  } catch (e) {
-    print("Firebase init failed: $e");
-  }
-
-  runApp(const MyApp());
-}
-
-  runApp(const MyApp());
-}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
-
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
