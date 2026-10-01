@@ -20,7 +20,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.x'
+          flutter-version: '3.19.6'
           channel: 'stable'
 
       - name: Prepare Code and Fix Imports
@@ -36,13 +36,14 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # إصلاح الاستيرادات ذات المسارات المطلقة
+          # 1. تصحيح الاستيرادات والإنشاء الذكي للمكتبات المفقودة
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
+          find lib/ -type f -name "*.dart" -exec sed -i 's/safeSetState/if (mounted) setState/g' {} +
           
-          # إدراج التبعات الأساسية في مكونات bottom_nav
-          find lib/components/bottom_nav/ -type f -name "*.dart" -exec sed -i '1s|^|import "package:fajr_al_sham/flutter_flow/flutter_flow_util.dart";\n|' {} +
+          # استيراد الأدوات الأساسية في جميع ملفات المكونات
+          find lib/ -type f -name "*.dart" -exec sed -i '1s|^|import "package:fajr_al_sham/flutter_flow/flutter_flow_util.dart";\n|' {} +
 
-          # التعرف على اسم صورة اللوجو بما فيها app_logo.png.jpg
+          # 2. إعداد الأيقونة لأندرويد فقط لتفادي خطأ iOS
           IMAGE_PATH=""
           if [ -f app_logo.png.jpg ]; then
             IMAGE_PATH="app_logo.png.jpg"
@@ -58,14 +59,14 @@ jobs:
 
           if [ -n "$IMAGE_PATH" ]; then
             flutter pub add dev:flutter_launcher_icons
-            printf "\nflutter_launcher_icons:\n  android: \"launcher_icon\"\n  ios: true\n  image_path: \"%s\"\n  min_sdk_android: 21\n" "$IMAGE_PATH" >> pubspec.yaml
+            printf "\nflutter_launcher_icons:\n  android: \"launcher_icon\"\n  ios: false\n  image_path: \"%s\"\n  min_sdk_android: 21\n" "$IMAGE_PATH" >> pubspec.yaml
             dart run flutter_launcher_icons
           fi
 
           flutter pub get
 
       - name: Build Release APK
-        run: flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons
+        run: flutter build apk --release --no-tree-shake-icons --main=lib/main.dart
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
