@@ -23,7 +23,7 @@ jobs:
           flutter-version: '3.19.6'
           channel: 'stable'
 
-      - name: Prepare Code and Fix Imports
+      - name: Prepare Code and Inject Core Utilities
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
@@ -36,19 +36,39 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 1. تصحيح المسارات المطلقة
+          # 1. إصلاح الاستيرادات المطلقة
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
-          
-          # 2. استبدال safeSetState
-          find lib/ -type f -name "*.dart" -exec sed -i 's/safeSetState/if (mounted) setState/g' {} +
-          
-          # 3. حقن استيراد flutter_flow_model و flutter_flow_util في بداية كل ملف بلا استثناء
-          find lib/ -type f -name "*.dart" | while read file; do
-            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';" > temp.dart
-            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_model.dart';" >> temp.dart
-            cat "$file" >> temp.dart
-            mv temp.dart "$file"
-          done
+
+          # 2. إنشاء ملف تعريف شامل لكل دوال FlutterFlow المفقودة وإضافته لـ main.dart
+          mkdir -p lib/flutter_flow
+          cat << 'EOF' > lib/flutter_flow/global_fixes.dart
+          import 'package:flutter/material.dart';
+
+          extension StateFixes<T extends StatefulWidget> on State<T> {
+            void safeSetState(VoidCallback fn) {
+              if (mounted) {
+                // ignore: invalid_use_of_protected_member
+                setState(fn);
+              }
+            }
+
+            Widget wrapWithModel({
+              required dynamic model,
+              required Widget child,
+              required VoidCallback updateCallback,
+              bool updateCallbackOnDispose = false,
+            }) {
+              return child;
+            }
+          }
+          EOF
+
+          # 3. إجبار استيراد global_fixes.dart في رأس جميع ملفات المشاريح
+          find lib/ -type f -name "*.dart" -exec bash -c '
+            for file; do
+              echo "import '\''package:fajr_al_sham/flutter_flow/global_fixes.dart'\'';" | cat - "$file" > temp && mv temp "$file"
+            done
+          ' _ {} +
 
           # 4. إعداد الأيقونة
           IMAGE_PATH=""
