@@ -1,9 +1,7 @@
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import 'summary_card_model.dart';
-export 'summary_card_model.dart';
-
 import 'package:flutter/material.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';
+import 'summary_card_model.dart';
 
 class SummaryCardWidget extends StatefulWidget {
   const SummaryCardWidget({
@@ -25,17 +23,20 @@ class _SummaryCardWidgetState extends State<SummaryCardWidget> {
   late SummaryCardModel _model;
 
   @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
   void initState() {
     super.initState();
-    _model = createModel(
-      context,
-      () => SummaryCardModel(),
-    );
+    _model = createModel(context, () => SummaryCardModel());
   }
 
   @override
   void dispose() {
-    _model.maybeDispose();
+    _model.dispose();
     super.dispose();
   }
 
@@ -67,21 +68,17 @@ class _SummaryCardWidgetState extends State<SummaryCardWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
                 ),
-              ].divide(
-                const SizedBox(width: 8.0),
-              ),
+              ].divide(const SizedBox(width: 8.0)),
             ),
-
             Text(
               widget.value ?? '',
-              style: FlutterFlowTheme.of(context).titleLarge.override(
+              style: FlutterFlowTheme.of(context).headlineMedium.override(
+                    fontFamily: 'Readex Pro',
                     fontSize: 24.0,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.bold,
                   ),
             ),
-          ].divide(
-            const SizedBox(height: 8.0),
-          ),
+          ].divide(const SizedBox(height: 8.0)),
         ),
       ),
     );
