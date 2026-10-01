@@ -23,11 +23,11 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Prepare Code, Fix Imports & Configure Android
+      - name: Prepare Code, Fix All Imports & Configure App Icon
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # 1. تحديث مجلد أندرويد
+          # 1. تحديث مجلد أندرويد ليدعم V2
           flutter create . --platforms=android --project-name fajr_al_sham
           
           # 2. حقن ملف Google Services
@@ -36,18 +36,42 @@ jobs:
             echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           fi
           
-          # 3. تعديل minSdkVersion إلى 21 لتوافق Firebase
+          # 3. تعديل minSdkVersion إلى 21
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 4. إصلاح جميع مسارات الاستيرادات المطلقة من FlutterFlow
+          # 4. إصلاح شامل لكافة الاستيرادات المكسورة في مشروع FlutterFlow
           find lib/ -type f -name "*.dart" -exec sed -i "s|import '/|import 'package:fajr_al_sham/|g" {} +
+          find lib/ -type f -name "*.dart" -exec sed -i "s|package:fajr_al_sham/components/bottom_nav/bottom_nav_widget.dart|package:fajr_al_sham/components/bottom_nav/bottom_nav_widget.dart' ;\nimport 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart|g" {} +
           
-          # 5. إصلاح استيرادات bottom_nav_widget بشكل خاص
+          # إجبار إدراج flutter_flow_util و nav_item في بداية bottom_nav_widget.dart
           if [ -f lib/components/bottom_nav/bottom_nav_widget.dart ]; then
             sed -i '1i import '\''package:fajr_al_sham/flutter_flow/flutter_flow_util.dart'\'';' lib/components/bottom_nav/bottom_nav_widget.dart
-            sed -i '1i import '\''package:fajr_al_sham/components/bottom_nav/nav_item/nav_item_widget.dart'\'';' lib/components/bottom_nav/bottom_nav_widget.dart
+            find lib/components/bottom_nav/ -type f -name "*.dart" -exec sed -i '1i import '\''package:fajr_al_sham/flutter_flow/flutter_flow_util.dart'\'';' {} +
           fi
-          
+
+          # 5. معالجة إعداد وتوليد لوجو التطبيق تلقائياً عند وجود الصورة
+          IMAGE_PATH=""
+          if [ -f assets/images/app_logo.png ]; then
+            IMAGE_PATH="assets/images/app_logo.png"
+          elif [ -f assets/images/app_logo.jpg ]; then
+            IMAGE_PATH="assets/images/app_logo.jpg"
+          elif [ -f app_logo.png ]; then
+            IMAGE_PATH="app_logo.png"
+          fi
+
+          if [ -n "$IMAGE_PATH" ]; then
+            flutter pub add dev:flutter_launcher_icons
+            cat <<EOT >> pubspec.yaml
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "$IMAGE_PATH"
+  min_sdk_android: 21
+EOT
+            dart run flutter_launcher_icons
+          fi
+
           flutter pub get
 
       - name: Build Release APK
