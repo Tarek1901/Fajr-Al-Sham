@@ -23,14 +23,18 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Install Dependencies
+      - name: Re-generate Android Files & Install Dependencies
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
+          # إنشاء هيكلية أندرويد المتوافقة مع v2 embedding
+          flutter create . --platforms=android
+          
           mkdir -p android/app
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
             echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           fi
+          
           flutter pub get
 
       - name: Build Release APK
