@@ -4,8 +4,14 @@ import 'package:intl/intl.dart';
 export 'flutter_flow_theme.dart';
 
 T valueOrDefault<T>(T? value, T defaultValue) {
-  if (value == null) return defaultValue;
-  if (value is String && value.isEmpty) return defaultValue;
+  if (value == null) {
+    return defaultValue;
+  }
+
+  if (value is String && value.isEmpty) {
+    return defaultValue;
+  }
+
   return value;
 }
 
@@ -14,15 +20,16 @@ String dateTimeFormat(
   DateTime? dateTime, {
   String? locale,
 }) {
-  if (dateTime == null) return '';
+  if (dateTime == null) {
+    return '';
+  }
+
   return DateFormat(format, locale).format(dateTime);
 }
 
 Future<void> launchURL(String url) async {}
 
 abstract class FlutterFlowModel<T extends Widget> {
-  bool _initialized = false;
-
   void initState(BuildContext context) {}
 
   void dispose() {}
@@ -30,14 +37,7 @@ abstract class FlutterFlowModel<T extends Widget> {
   void onUpdate() {}
 
   void maybeDispose() {
-    if (_initialized) {
-      dispose();
-      _initialized = false;
-    }
-  }
-
-  void markInitialized() {
-    _initialized = true;
+    dispose();
   }
 }
 
@@ -45,9 +45,8 @@ T createModel<T extends FlutterFlowModel>(
   BuildContext context,
   T Function() builder,
 ) {
-  final model = builder();
+  final T model = builder();
   model.initState(context);
-  model.markInitialized();
   return model;
 }
 
@@ -82,13 +81,16 @@ class FlutterFlowDynamicModels<T extends FlutterFlowModel> {
     for (final model in _children.values) {
       model.dispose();
     }
+
     _children.clear();
   }
 }
 
 extension ListDivideExt<T extends Widget> on List<T> {
   List<Widget> divide(Widget separator) {
-    if (isEmpty) return [];
+    if (isEmpty) {
+      return [];
+    }
 
     if (length == 1) {
       return [this[0]];
@@ -99,7 +101,7 @@ extension ListDivideExt<T extends Widget> on List<T> {
     for (int i = 0; i < length; i++) {
       result.add(this[i]);
 
-      if (i != length - 1) {
+      if (i < length - 1) {
         result.add(separator);
       }
     }
