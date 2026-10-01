@@ -1,81 +1,45 @@
-import '/components/nav_item/nav_item_widget.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';
 
-class BottomNavWidget extends StatelessWidget {
+class BottomNavWidget extends StatefulWidget {
   const BottomNavWidget({super.key});
 
   @override
+  State<BottomNavWidget> createState() => _BottomNavWidgetState();
+}
+
+class _BottomNavWidgetState extends State<BottomNavWidget> {
+  int _currentIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).secondaryBackground,
-        border: Border(
-          top: BorderSide(
-            color: FlutterFlowTheme.of(context).alternate,
-            width: 1,
-          ),
+    return Scaffold(
+      body: Center(
+        child: Text(
+          'الصفحة رقم $_currentIndex',
+          style: FlutterFlowTheme.of(context).headlineMedium,
         ),
       ),
-      padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          NavItemWidget(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
             label: 'الرئيسية',
-            icon: Icon(
-              Icons.home_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24,
-            ),
-            target: 'HomeDashboard',
-            selected: true,
           ),
-
-          NavItemWidget(
-            label: 'المشاريع',
-            icon: Icon(
-              Icons.list_alt_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24,
-            ),
-            target: 'ProjectsFeed',
-            selected: false,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'الاستثمار',
           ),
-
-          NavItemWidget(
-            label: 'مساهماتي',
-            icon: Icon(
-              Icons.donut_large_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24,
-            ),
-            target: 'MyParticipation',
-            selected: false,
-          ),
-
-          NavItemWidget(
-            label: 'المحفظة',
-            icon: Icon(
-              Icons.account_balance_wallet_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24,
-            ),
-            target: 'Wallet',
-            selected: false,
-          ),
-
-          NavItemWidget(
-            label: 'حسابي',
-            icon: Icon(
-              Icons.person_outline_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
-              size: 24,
-            ),
-            target: 'UserProfile',
-            selected: false,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'الحساب',
           ),
         ],
       ),
