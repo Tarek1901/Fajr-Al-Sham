@@ -39,7 +39,7 @@ jobs:
           # 1. إصلاح الاستيرادات المطلقة
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
 
-          # 2. إنشاء ملف تعريف شامل لكل دوال FlutterFlow المفقودة وإضافته لـ main.dart
+          # 2. إنشاء ملف الترقيع الشامل لدوال wrapWithModel و safeSetState
           mkdir -p lib/flutter_flow
           cat << 'EOF' > lib/flutter_flow/global_fixes.dart
           import 'package:flutter/material.dart';
@@ -63,14 +63,29 @@ jobs:
           }
           EOF
 
-          # 3. إجبار استيراد global_fixes.dart في رأس جميع ملفات المشاريح
+          # 3. تجميع كافة المكونات (Components) في ملف واحد واستيراده في كل ملفات الـ components
+          if [ -d "lib/components" ]; then
+            echo "// Export all components" > lib/components/all_components.dart
+            find lib/components/ -type f -name "*.dart" ! -name "all_components.dart" | while read comp; do
+              rel_path=${comp#lib/components/}
+              echo "export '$rel_path';" >> lib/components/all_components.dart
+            done
+          fi
+
+          # 4. حقن الترقيع واستيراد المكونات الشامل لكل ملف دارت
           find lib/ -type f -name "*.dart" -exec bash -c '
             for file; do
-              echo "import '\''package:fajr_al_sham/flutter_flow/global_fixes.dart'\'';" | cat - "$file" > temp && mv temp "$file"
+              {
+                echo "import '\''package:fajr_al_sham/flutter_flow/global_fixes.dart'\'';"
+                if [[ "$file" == lib/components/* ]]; then
+                  echo "import '\''package:fajr_al_sham/components/all_components.dart'\'';"
+                fi
+                cat "$file"
+              } > temp && mv temp "$file"
             done
           ' _ {} +
 
-          # 4. إعداد الأيقونة
+          # 5. إعداد الأيقونة
           IMAGE_PATH=""
           if [ -f app_logo.png.jpg ]; then
             IMAGE_PATH="app_logo.png.jpg"
