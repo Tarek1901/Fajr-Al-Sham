@@ -31,7 +31,7 @@ jobs:
           echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
           
-          # إصلاح الاستيرادات المطلقة للـ FlutterFlow لتجنب أخطاء Gradle
+          # اصلاح مسارات المستوردات المطلقة
           find lib/ -type f -name "*.dart" -exec sed -i "s|import '/|import 'package:fajr_al_sham/|g" {} +
           
           flutter pub get
