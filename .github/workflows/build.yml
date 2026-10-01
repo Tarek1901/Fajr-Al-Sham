@@ -34,7 +34,6 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
 
-          # 1. إنشاء ملف الترقيع الشامل لدوال FlutterFlow الأساسية مرة واحدة فقط
           mkdir -p lib/flutter_flow
           cat << 'EOF' > lib/flutter_flow/global_fixes.dart
           import 'package:flutter/material.dart';
@@ -57,49 +56,6 @@ jobs:
             }
           }
           EOF
-
-          # 2. تجميع كافة المكونات الداخلية بملف واحد تفادياً لأي ضياع
-          if [ -d "lib/components" ]; then
-            echo "// Export all components" > lib/components/all_components.dart
-            find lib/components/ -type f -name "*.dart" ! -name "all_components.dart" | while read comp; do
-              rel_path=${comp#lib/components/}
-              echo "export '$rel_path';" >> lib/components/all_components.dart
-            done
-          fi
-
-          # 3. تنظيف أي استيرادات سابقة وحقن الاستيرادات الجديدة بذكاء بدون تكرار
-          find lib/ -type f -name "*.dart" ! -name "global_fixes.dart" ! -name "all_components.dart" | while read file; do
-            sed -i '/global_fixes.dart/d' "$file"
-            sed -i '/all_components.dart/d' "$file"
-            
-            tmp_file=$(mktemp)
-            echo "import 'package:fajr_al_sham/flutter_flow/global_fixes.dart';" > "$tmp_file"
-            if [[ "$file" == lib/components/* ]]; then
-              echo "import 'package:fajr_al_sham/components/all_components.dart';" >> "$tmp_file"
-            fi
-            cat "$file" >> "$tmp_file"
-            mv "$tmp_file" "$file"
-          done
-
-          # 4. إعداد الأيقونة تلقائياً إن وجدت
-          IMAGE_PATH=""
-          if [ -f app_logo.png.jpg ]; then
-            IMAGE_PATH="app_logo.png.jpg"
-          elif [ -f assets/images/app_logo.png.jpg ]; then
-            IMAGE_PATH="assets/images/app_logo.png.jpg"
-          elif [ -f assets/images/app_logo.png ]; then
-            IMAGE_PATH="assets/images/app_logo.png"
-          elif [ -f assets/images/app_logo.jpg ]; then
-            IMAGE_PATH="assets/images/app_logo.jpg"
-          elif [ -f app_logo.png ]; then
-            IMAGE_PATH="app_logo.png"
-          fi
-
-          if [ -n "$IMAGE_PATH" ]; then
-            flutter pub add dev:flutter_launcher_icons
-            printf "\nflutter_launcher_icons:\n  android: \"launcher_icon\"\n  ios: false\n  image_path: \"%s\"\n  min_sdk_android: 21\n" "$IMAGE_PATH" >> pubspec.yaml
-            dart run flutter_launcher_icons
-          fi
 
           flutter pub get
 
