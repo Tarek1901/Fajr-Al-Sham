@@ -38,7 +38,9 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: false,
       ),
       themeMode: _themeMode,
-      home: const BottomNavWidget(),
+      home: const Scaffold(
+        body: BottomNavWidget(),
+      ),
     );
   }
 }
