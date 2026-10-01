@@ -23,26 +23,25 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Prepare Code & Configure Android
+      - name: Prepare Code & Force Android V2 Embedding
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # 1. حقن ملف Google Services إذا كان موجوداً
+          # 1. تحديث مجلد الأندرويد وإجباره على Android Embedding V2
+          flutter create . --platforms=android --project-name fajr_al_sham
+          
+          # 2. حقن ملف Google Services
           mkdir -p android/app
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
             echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           fi
           
-          # 2. تعديل minSdkVersion إلى 21 وتفعيل multiDex لتوافق Firebase
-          if [ -f android/app/build.gradle ]; then
-            sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
-            sed -i 's/multiDexEnabled .*/multiDexEnabled true/g' android/app/build.gradle
-          fi
+          # 3. ضبط minSdkVersion و multiDex ليتوافق مع sqflite و Firebase
+          sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 3. إصلاح مسارات الاستيرادات المطلقة من FlutterFlow
+          # 4. إصلاح كافة الاستيرادات المطلقة من FlutterFlow
           find lib/ -type f -name "*.dart" -exec sed -i "s|import '/|import 'package:fajr_al_sham/|g" {} +
           
-          # 4. تنزيل الحزم
           flutter pub get
 
       - name: Build Release APK
