@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'components/bottom_nav/bottom_nav_widget.dart';
+import 'components/bottom_nav/bottom_nav_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +39,10 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: false,
       ),
       themeMode: _themeMode,
-      home: const Scaffold(
-        body: BottomNavWidget(),
+      home: wrapWithModel(
+        model: BottomNavModel(),
+        updateCallback: () {},
+        child: const BottomNavWidget(),
       ),
     );
   }
