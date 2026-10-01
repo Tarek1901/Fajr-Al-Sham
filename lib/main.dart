@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'flutter_flow/flutter_flow_theme.dart';
-import 'components/bottom_nav/bottom_nav_widget.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
+import 'package:fajr_al_sham/components/bottom_nav/bottom_nav_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
