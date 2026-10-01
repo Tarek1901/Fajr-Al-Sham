@@ -1147,12 +1147,6 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           onTap: () async {
                                             context.goNamed(
                                               ProjectDetailsWidget.routeName,
-                                              queryParameters: {
-                                                'projectId': serializeParam(
-                                                  '1',
-                                                  ParamType.String,
-                                                ),
-                                              },
                                             );
                                           },
                                           child: ClipRRect(
