@@ -36,18 +36,21 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 1. إصلاح مسارات الاستيراد المطلقة
+          # 1. تصحيح المسارات المطلقة
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
           
-          # 2. استبدال safeSetState بالطريقة القياسية
+          # 2. استبدال safeSetState
           find lib/ -type f -name "*.dart" -exec sed -i 's/safeSetState/if (mounted) setState/g' {} +
           
-          # 3. حقن الاستيرادات المطلوبة بشكل مضمون في أعلى كل ملف دارت
-          for file in $(find lib/ -type f -name "*.dart"); do
-            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';" | cat - "$file" > temp && mv temp "$file"
+          # 3. حقن استيراد flutter_flow_model و flutter_flow_util في بداية كل ملف بلا استثناء
+          find lib/ -type f -name "*.dart" | while read file; do
+            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';" > temp.dart
+            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_model.dart';" >> temp.dart
+            cat "$file" >> temp.dart
+            mv temp.dart "$file"
           done
 
-          # 4. إعداد الأيقونة لأندرويد فقط
+          # 4. إعداد الأيقونة
           IMAGE_PATH=""
           if [ -f app_logo.png.jpg ]; then
             IMAGE_PATH="app_logo.png.jpg"
