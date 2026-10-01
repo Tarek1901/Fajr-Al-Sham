@@ -59,6 +59,10 @@ abstract class FlutterFlowTheme {
   late Color tertiaryContainer;
   late Color errorContainer;
 
+  // المتغيرات المضافة لحل مشكلة الـ Build
+  late Color surfaceVariant;
+  late Color surfaceVariant30;
+
   // =========================
   // Text Styles
   // =========================
@@ -215,6 +219,13 @@ class LightModeTheme extends FlutterFlowTheme {
 
   @override
   Color errorContainer = const Color(0xFFFF5963);
+
+  // القيم المعرفة للألوان الجديدة التي تسببت بالخطأ
+  @override
+  Color surfaceVariant = const Color(0xFFE1E2EC);
+
+  @override
+  Color surfaceVariant30 = const Color(0x4DE1E2EC); // بقيمة شفافية 30% مطابقة
 }
 
 // ============================================================
