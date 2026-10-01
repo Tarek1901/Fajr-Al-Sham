@@ -40,8 +40,11 @@ jobs:
           
           flutter pub get
 
+      - name: Analyze Dart Code
+        run: flutter analyze || true
+
       - name: Build Release APK
-        run: flutter build apk --release --no-tree-shake-icons
+        run: flutter build apk --release --no-tree-shake-icons --verbose
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
