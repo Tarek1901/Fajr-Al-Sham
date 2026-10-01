@@ -724,8 +724,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                               .transparent,
                                                           onTap: () async {
                                                             context.goNamed(
-                                                                ProjectsFeedWidget
-                                                                    .routeName);
+                                                                'ProjectsFeed');
                                                           },
                                                           child: Container(
                                                             decoration:
@@ -808,8 +807,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                               .transparent,
                                                           onTap: () async {
                                                             context.goNamed(
-                                                                MyParticipationWidget
-                                                                    .routeName);
+                                                                'MyParticipation');
                                                           },
                                                           child: Container(
                                                             decoration:
@@ -904,8 +902,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                               .transparent,
                                                           onTap: () async {
                                                             context.goNamed(
-                                                                WalletWidget
-                                                                    .routeName);
+                                                                'Wallet');
                                                           },
                                                           child: Container(
                                                             decoration:
@@ -988,8 +985,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                               .transparent,
                                                           onTap: () async {
                                                             context.goNamed(
-                                                                UserProfileWidget
-                                                                    .routeName);
+                                                                'UserProfile');
                                                           },
                                                           child: Container(
                                                             decoration:
@@ -1117,9 +1113,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                               highlightColor:
                                                   Colors.transparent,
                                               onTap: () async {
-                                                context.goNamed(
-                                                    ProjectsFeedWidget
-                                                        .routeName);
+                                                context.goNamed('ProjectsFeed');
                                               },
                                               child: wrapWithModel(
                                                 model: _model.buttonModel,
@@ -1145,8 +1139,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            context.goNamed(
-                                                ProjectsFeedWidget.routeName);
+                                            context.goNamed('ProjectsFeed');
                                           },
                                           child: ClipRRect(
                                             borderRadius:
@@ -1245,54 +1238,54 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                                             1.4,
                                                                       ),
                                                                 ),
-                                                              ],
-                                                            ),
-                                                            Text(
-                                                              'قطاع الطاقة المتجددة',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .labelSmall
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .spaceGrotesk(
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .labelSmall
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .labelSmall
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primary,
-                                                                    letterSpacing:
-                                                                        0.0,
+                                                            ],
+                                                          ),
+                                                          Text(
+                                                            'قطاع الطاقة المتجددة',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .labelSmall
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .spaceGrotesk(
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
-                                                                          .labelSmall
-                                                                          .fontWeight,
+                                                                        .labelSmall
+                                                                        .fontWeight,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
-                                                                          .labelSmall
-                                                                          .fontStyle,
-                                                                    lineHeight:
-                                                                        1.2,
+                                                                        .labelSmall
+                                                                        .fontStyle,
                                                                   ),
-                                                            ),
-                                                            Text(
-                                                              'مشروع وهمي يهدف لتطوير أنظمة الطاقة الشمسية...',
-                                                              maxLines: 1,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primary,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelSmall
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelSmall
+                                                                      .fontStyle,
+                                                                  lineHeight:
+                                                                      1.2,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            'مشروع وهمي يهدف لتطوير أنظمة الطاقة الشمسية...',
+                                                            maxLines: 1,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
                                                                   .bodySmall
                                                                   .override(
                                                                     font: GoogleFonts
                                                                         .inter(
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .bodySmall
+                                                                          .bodyStrong
                                                                           .fontWeight,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
@@ -1315,13 +1308,12 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                                     lineHeight:
                                                                         1.5,
                                                                   ),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              height: 4)),
-                                                        ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            height: 4)),
                                                       ),
                                                     ),
                                                   ),
