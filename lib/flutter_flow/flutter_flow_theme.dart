@@ -2,165 +2,224 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class FlutterFlowTheme {
-  static ThemeMode themeMode = ThemeMode.system;
+  // =========================
+  // Theme Mode
+  // =========================
+
+  static ThemeMode themeMode = ThemeMode.light;
 
   static Future<void> initialize() async {
-    // No persistent theme storage required for APK build.
+    themeMode = ThemeMode.light;
   }
 
-  static void saveThemeMode(ThemeMode mode) {
+  static Future<void> saveThemeMode(ThemeMode mode) async {
     themeMode = mode;
   }
+
+  // =========================
+  // Theme Access
+  // =========================
 
   static FlutterFlowTheme of(BuildContext context) {
     return LightModeTheme();
   }
 
-  Color get primary;
-  Color get secondary;
-  Color get tertiary;
-  Color get alternate;
-  Color get primaryText;
-  Color get secondaryText;
-  Color get primaryBackground;
-  Color get secondaryBackground;
-  Color get accent1;
-  Color get accent2;
-  Color get accent3;
-  Color get accent4;
-  Color get success;
-  Color get warning;
-  Color get error;
-  Color get info;
+  // =========================
+  // Colors
+  // =========================
 
-  Color get onPrimary;
-  Color get onSecondary;
-  Color get onTertiary;
-  Color get onError;
-  Color get primaryContainer;
-  Color get secondaryContainer;
-  Color get tertiaryContainer;
-  Color get errorContainer;
+  late Color primary;
+  late Color secondary;
+  late Color tertiary;
+  late Color alternate;
 
-  TextStyle get displayLarge =>
-      GoogleFonts.inter(fontSize: 57, fontWeight: FontWeight.w400);
+  late Color primaryText;
+  late Color secondaryText;
 
-  TextStyle get displayMedium =>
-      GoogleFonts.inter(fontSize: 45, fontWeight: FontWeight.w400);
+  late Color primaryBackground;
+  late Color secondaryBackground;
 
-  TextStyle get displaySmall =>
-      GoogleFonts.inter(fontSize: 36, fontWeight: FontWeight.w400);
+  late Color accent1;
+  late Color accent2;
+  late Color accent3;
+  late Color accent4;
 
-  TextStyle get headlineLarge =>
-      GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w500);
+  late Color success;
+  late Color warning;
+  late Color error;
+  late Color info;
 
-  TextStyle get headlineMedium =>
-      GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w500);
+  late Color onPrimary;
+  late Color onSecondary;
+  late Color onTertiary;
+  late Color onError;
 
-  TextStyle get headlineSmall =>
-      GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w500);
+  late Color primaryContainer;
+  late Color secondaryContainer;
+  late Color tertiaryContainer;
+  late Color errorContainer;
 
-  TextStyle get titleLarge =>
-      GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w500);
+  // =========================
+  // Text Styles
+  // =========================
 
-  TextStyle get titleMedium =>
-      GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w500);
+  TextStyle get displayLarge => GoogleFonts.inter(
+        fontWeight: FontWeight.w400,
+        fontSize: 57,
+      );
 
-  TextStyle get titleSmall =>
-      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500);
+  TextStyle get displayMedium => GoogleFonts.inter(
+        fontWeight: FontWeight.w400,
+        fontSize: 45,
+      );
 
-  TextStyle get bodyLarge =>
-      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w400);
+  TextStyle get displaySmall => GoogleFonts.inter(
+        fontWeight: FontWeight.w400,
+        fontSize: 36,
+      );
 
-  TextStyle get bodyMedium =>
-      GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400);
+  TextStyle get headlineLarge => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 32,
+      );
 
-  TextStyle get bodySmall =>
-      GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w400);
+  TextStyle get headlineMedium => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 28,
+      );
 
-  TextStyle get labelLarge =>
-      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w400);
+  TextStyle get headlineSmall => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 24,
+      );
 
-  TextStyle get labelMedium =>
-      GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400);
+  TextStyle get titleLarge => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 22,
+      );
 
-  TextStyle get labelSmall =>
-      GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w400);
+  TextStyle get titleMedium => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 18,
+      );
+
+  TextStyle get titleSmall => GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+      );
+
+  TextStyle get bodyLarge => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 16,
+      );
+
+  TextStyle get bodyMedium => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+      );
+
+  TextStyle get bodySmall => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 12,
+      );
+
+  TextStyle get labelLarge => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 16,
+      );
+
+  TextStyle get labelMedium => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+      );
+
+  TextStyle get labelSmall => GoogleFonts.inter(
+        fontWeight: FontWeight.normal,
+        fontSize: 12,
+      );
 }
+
+// ============================================================
+// LIGHT MODE
+// ============================================================
 
 class LightModeTheme extends FlutterFlowTheme {
   @override
-  Color get primary => const Color(0xFF4B39EF);
+  Color primary = const Color(0xFF4B39EF);
 
   @override
-  Color get secondary => const Color(0xFF39D2C0);
+  Color secondary = const Color(0xFF39D2C0);
 
   @override
-  Color get tertiary => const Color(0xFFEE8B60);
+  Color tertiary = const Color(0xFFEE8B60);
 
   @override
-  Color get alternate => const Color(0xFFE0E3E7);
+  Color alternate = const Color(0xFFE0E3E7);
 
   @override
-  Color get primaryText => const Color(0xFF14181B);
+  Color primaryText = const Color(0xFF14181B);
 
   @override
-  Color get secondaryText => const Color(0xFF57636C);
+  Color secondaryText = const Color(0xFF57636C);
 
   @override
-  Color get primaryBackground => const Color(0xFFF1F4F8);
+  Color primaryBackground = const Color(0xFFF1F4F8);
 
   @override
-  Color get secondaryBackground => const Color(0xFFFFFFFF);
+  Color secondaryBackground = const Color(0xFFFFFFFF);
 
   @override
-  Color get accent1 => const Color(0x4C4B39EF);
+  Color accent1 = const Color(0x4C4B39EF);
 
   @override
-  Color get accent2 => const Color(0x4D39D2C0);
+  Color accent2 = const Color(0x4D39D2C0);
 
   @override
-  Color get accent3 => const Color(0x4DEE8B60);
+  Color accent3 = const Color(0x4DEE8B60);
 
   @override
-  Color get accent4 => const Color(0xCCFFFFFF);
+  Color accent4 = const Color(0xCCFFFFFF);
 
   @override
-  Color get success => const Color(0xFF24A891);
+  Color success = const Color(0xFF24A891);
 
   @override
-  Color get warning => const Color(0xFFFCDC0C);
+  Color warning = const Color(0xFFFCDC0C);
 
   @override
-  Color get error => const Color(0xFFFF5963);
+  Color error = const Color(0xFFFF5963);
 
   @override
-  Color get info => const Color(0xFFFFFFFF);
+  Color info = const Color(0xFFFFFFFF);
 
   @override
-  Color get onPrimary => const Color(0xFFFFFFFF);
+  Color onPrimary = const Color(0xFFFFFFFF);
 
   @override
-  Color get onSecondary => const Color(0xFFFFFFFF);
+  Color onSecondary = const Color(0xFFFFFFFF);
 
   @override
-  Color get onTertiary => const Color(0xFFFFFFFF);
+  Color onTertiary = const Color(0xFFFFFFFF);
 
   @override
-  Color get onError => const Color(0xFFFFFFFF);
+  Color onError = const Color(0xFFFFFFFF);
 
   @override
-  Color get primaryContainer => const Color(0xFF4B39EF);
+  Color primaryContainer = const Color(0xFF4B39EF);
 
   @override
-  Color get secondaryContainer => const Color(0xFF39D2C0);
+  Color secondaryContainer = const Color(0xFF39D2C0);
 
   @override
-  Color get tertiaryContainer => const Color(0xFFEE8B60);
+  Color tertiaryContainer = const Color(0xFFEE8B60);
 
   @override
-  Color get errorContainer => const Color(0xFFFF5963);
+  Color errorContainer = const Color(0xFFFF5963);
 }
+
+// ============================================================
+// TEXT STYLE HELPER
+// ============================================================
 
 extension TextStyleHelper on TextStyle {
   TextStyle override({
@@ -172,27 +231,29 @@ extension TextStyleHelper on TextStyle {
     FontStyle? fontStyle,
     bool useGoogleFonts = true,
     double? lineHeight,
+    double? letterSpacing,
   }) {
-    final base = font ?? this;
+    TextStyle result = font ?? this;
 
-    if (useGoogleFonts && font == null) {
-      return GoogleFonts.getFont(
-        fontFamily ?? 'Inter',
-        color: color ?? base.color,
-        fontSize: fontSize ?? base.fontSize,
-        fontWeight: fontWeight ?? base.fontWeight,
-        fontStyle: fontStyle ?? base.fontStyle,
-        height: lineHeight ?? base.height,
+    if (useGoogleFonts && font == null && fontFamily != null) {
+      result = GoogleFonts.getFont(
+        fontFamily,
+        color: result.color,
+        fontSize: result.fontSize,
+        fontWeight: result.fontWeight,
+        fontStyle: result.fontStyle,
+        height: result.height,
+        letterSpacing: result.letterSpacing,
       );
     }
 
-    return base.copyWith(
-      fontFamily: fontFamily,
+    return result.copyWith(
       color: color,
       fontSize: fontSize,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       height: lineHeight,
+      letterSpacing: letterSpacing,
     );
   }
 }
