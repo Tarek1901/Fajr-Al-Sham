@@ -39,12 +39,13 @@ jobs:
           # 1. إصلاح مسارات الاستيراد المطلقة
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
           
-          # 2. استبدال safeSetState بالصيغة القياسية لـ Flutter
+          # 2. استبدال safeSetState بالطريقة القياسية
           find lib/ -type f -name "*.dart" -exec sed -i 's/safeSetState/if (mounted) setState/g' {} +
           
-          # 3. حل مشكلة المكونات المفقودة (مثل NavItemWidget) بربط الاستيرادات المتبادلة
-          find lib/ -type f -name "*.dart" -exec sed -i '1i import "package:fajr_al_sham/flutter_flow/flutter_flow_util.dart";' {} +
-          find lib/components/ -type f -name "*.dart" -exec sed -i '1i import "package:fajr_al_sham/index.dart";' {} + 2>/dev/null || true
+          # 3. حقن الاستيرادات المطلوبة بشكل مضمون في أعلى كل ملف دارت
+          for file in $(find lib/ -type f -name "*.dart"); do
+            echo "import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';" | cat - "$file" > temp && mv temp "$file"
+          done
 
           # 4. إعداد الأيقونة لأندرويد فقط
           IMAGE_PATH=""
