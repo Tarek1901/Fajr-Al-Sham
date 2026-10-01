@@ -1,10 +1,8 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'summary_card_model.dart';
-export 'summary_card_model.dart';
 import 'package:flutter/material.dart';
 
-class SummaryCardWidget extends StatefulWidget {
+class SummaryCardWidget extends StatelessWidget {
   const SummaryCardWidget({
     super.key,
     this.title,
@@ -15,32 +13,6 @@ class SummaryCardWidget extends StatefulWidget {
   final String? title;
   final String? value;
   final Widget? icon;
-
-  @style
-  @override
-  State<SummaryCardWidget> createState() => _SummaryCardWidgetState();
-}
-
-class _SummaryCardWidgetState extends State<SummaryCardWidget> {
-  late SummaryCardModel _model;
-
-  @override
-  void setState(VoidCallback callback) {
-    super.setState(callback);
-    _model.onUpdate();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => SummaryCardModel());
-  }
-
-  @override
-  void dispose() {
-    _model.maybeDispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +31,22 @@ class _SummaryCardWidgetState extends State<SummaryCardWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                if (widget.icon != null) widget.icon!,
-                Text(
-                  widget.title ?? '',
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                if (icon != null) icon!,
+                Expanded(
+                  child: Text(
+                    title ?? '',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
                 ),
               ].divide(const SizedBox(width: 8.0)),
             ),
             Text(
-              widget.value ?? '',
-              style: FlutterFlowTheme.of(context).headlineMedium,
+              value ?? '',
+              style: FlutterFlowTheme.of(context).titleLarge,
             ),
           ].divide(const SizedBox(height: 8.0)),
         ),
       ),
     );
+  }
+}
