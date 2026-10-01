@@ -1146,8 +1146,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             context.goNamed(
-                                              ProjectDetailsWidget.routeName,
-                                            );
+                                                ProjectsFeedWidget.routeName);
                                           },
                                           child: ClipRRect(
                                             borderRadius:
