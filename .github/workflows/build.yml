@@ -35,11 +35,14 @@ jobs:
           fi
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
+
+          # 1. تنزيل التبعيات الأساسية قبل التعديل
+          flutter pub get
           
-          # 1. إصلاح الاستيرادات المطلقة الخاصة بالمشروع فقط
+          # 2. إصلاح الاستيرادات المطلقة التي تبدأ بـ import '/lib/' أو import '/flutter_flow/' فقط
           find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
 
-          # 2. إنشاء ملف الترقيع الشامل
+          # 3. إنشاء ملف الترقيع الشامل لدوال wrapWithModel و safeSetState
           mkdir -p lib/flutter_flow
           cat << 'EOF' > lib/flutter_flow/global_fixes.dart
           import 'package:flutter/material.dart';
@@ -63,7 +66,7 @@ jobs:
           }
           EOF
 
-          # 3. تجميع كافة المكونات في ملف واحد وتصديرها
+          # 4. تجميع كافة المكونات المتاحة
           if [ -d "lib/components" ]; then
             echo "// Export all components" > lib/components/all_components.dart
             find lib/components/ -type f -name "*.dart" ! -name "all_components.dart" | while read comp; do
@@ -72,18 +75,18 @@ jobs:
             done
           fi
 
-          # 4. حقن الملفات المطلوبة في أعلى الملفات الذاتية فقط
+          # 5. حقن ملفات الترقيع والمكونات بأول ملفات المشروع فقط
           find lib/ -type f -name "*.dart" ! -name "global_fixes.dart" ! -name "all_components.dart" | while read file; do
-            {
-              echo "import 'package:fajr_al_sham/flutter_flow/global_fixes.dart';"
-              if [[ "$file" == lib/components/* ]]; then
-                echo "import 'package:fajr_al_sham/components/all_components.dart';"
-              fi
-              cat "$file"
-            } > temp.dart && mv temp.dart "$file"
+            tmp_file=$(mktemp)
+            echo "import 'package:fajr_al_sham/flutter_flow/global_fixes.dart';" > "$tmp_file"
+            if [[ "$file" == lib/components/* ]]; then
+              echo "import 'package:fajr_al_sham/components/all_components.dart';" >> "$tmp_file"
+            fi
+            cat "$file" >> "$tmp_file"
+            mv "$tmp_file" "$file"
           done
 
-          # 5. إعداد الأيقونة
+          # 6. إعداد الأيقونة
           IMAGE_PATH=""
           if [ -f app_logo.png.jpg ]; then
             IMAGE_PATH="app_logo.png.jpg"
