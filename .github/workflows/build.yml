@@ -27,8 +27,8 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # إنشاء هيكلية أندرويد المتوافقة مع v2 embedding
-          flutter create . --platforms=android
+          # إنشاء هيكلية أندرويد مع تحديد اسم حزمة متوافق مع شروط Dart
+          flutter create . --platforms=android --project-name fajr_al_sham
           
           mkdir -p android/app
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
