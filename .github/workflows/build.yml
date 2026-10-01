@@ -27,18 +27,14 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # 1. توليد مجلد Android
+          # 1. إنشاء مشروع الأندرويد
           flutter create . --platforms=android --project-name fajr_al_sham
 
           # 2. إضافة إذن الإنترنت
           sed -i '/<manifest/a \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
 
-          # 3. كتابة ملف google-services.json
+          # 3. حقن ملف google-services.json داخل المجلد الصحيح
           echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
-
-          # 4. ربط إضافة google-services داخل build.gradle المولد تلقائياً
-          sed -i 's/dependencies {/dependencies {\n        classpath "com.google.gms:google-services:4.4.1"/' android/build.gradle
-          echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
 
       - name: Build APK Release
         run: flutter build apk --release
