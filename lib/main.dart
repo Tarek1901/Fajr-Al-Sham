@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
-import 'flutter_flow/flutter_flow_util.dart';
 import 'components/bottom_nav/bottom_nav_widget.dart';
-import 'components/bottom_nav/bottom_nav_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,18 +14,17 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
-
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  void setThemeMode(ThemeMode mode) => setState(() {
-        _themeMode = mode;
-        FlutterFlowTheme.saveThemeMode(mode);
-      });
+  void setThemeMode(ThemeMode mode) {
+    setState(() {
+      _themeMode = mode;
+      FlutterFlowTheme.saveThemeMode(mode);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +36,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: false,
       ),
       themeMode: _themeMode,
-      home: wrapWithModel(
-        model: BottomNavModel(),
-        updateCallback: () {},
-        child: const BottomNavWidget(),
-      ),
+      home: const BottomNavWidget(),
     );
   }
 }
