@@ -60,10 +60,6 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: 0,
-                height: 0,
-              ),
-              Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -1149,8 +1145,6 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            // ff_lite_route_params:project_id:"1"
-
                                             context.goNamed(
                                               ProjectDetailsWidget.routeName,
                                               queryParameters: {
@@ -1158,7 +1152,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                   '1',
                                                   ParamType.String,
                                                 ),
-                                              }.withoutNulls,
+                                              },
                                             );
                                           },
                                           child: ClipRRect(
@@ -1284,12 +1278,12 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                                         0.0,
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .labelSmall
-                                                                        .fontWeight,
+                                                                          .labelSmall
+                                                                          .fontWeight,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .labelSmall
-                                                                        .fontStyle,
+                                                                          .labelSmall
+                                                                          .fontStyle,
                                                                     lineHeight:
                                                                         1.2,
                                                                   ),
@@ -1319,12 +1313,12 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                                                                         0.0,
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .bodySmall
-                                                                        .fontWeight,
+                                                                          .bodySmall
+                                                                          .fontWeight,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .bodySmall
-                                                                        .fontStyle,
+                                                                          .bodySmall
+                                                                          .fontStyle,
                                                                     lineHeight:
                                                                         1.5,
                                                                   ),
@@ -1350,16 +1344,6 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional(0, 1),
-                      child: Container(
-                        child: wrapWithModel(
-                          model: _model.bottomNavModel,
-                          updateCallback: () => safeSetState(() {}),
-                          child: BottomNavWidget(),
                         ),
                       ),
                     ),
