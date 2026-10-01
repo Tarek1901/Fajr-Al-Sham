@@ -4,6 +4,11 @@ import 'flutter_flow/flutter_flow_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await initFirebase();
+  } catch (e) {
+    print("Firebase init failed: $e");
+  }
   runApp(const MyApp());
 }
 
