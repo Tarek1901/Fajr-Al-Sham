@@ -23,11 +23,11 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Prepare Code & Force Android V2 Embedding
+      - name: Prepare Code, Fix Imports & Configure Android
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # 1. تحديث مجلد الأندرويد وإجباره على Android Embedding V2
+          # 1. تحديث مجلد أندرويد
           flutter create . --platforms=android --project-name fajr_al_sham
           
           # 2. حقن ملف Google Services
@@ -36,11 +36,17 @@ jobs:
             echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           fi
           
-          # 3. ضبط minSdkVersion و multiDex ليتوافق مع sqflite و Firebase
+          # 3. تعديل minSdkVersion إلى 21 لتوافق Firebase
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
           
-          # 4. إصلاح كافة الاستيرادات المطلقة من FlutterFlow
+          # 4. إصلاح جميع مسارات الاستيرادات المطلقة من FlutterFlow
           find lib/ -type f -name "*.dart" -exec sed -i "s|import '/|import 'package:fajr_al_sham/|g" {} +
+          
+          # 5. إصلاح استيرادات bottom_nav_widget بشكل خاص
+          if [ -f lib/components/bottom_nav/bottom_nav_widget.dart ]; then
+            sed -i '1i import '\''package:fajr_al_sham/flutter_flow/flutter_flow_util.dart'\'';' lib/components/bottom_nav/bottom_nav_widget.dart
+            sed -i '1i import '\''package:fajr_al_sham/components/bottom_nav/nav_item/nav_item_widget.dart'\'';' lib/components/bottom_nav/bottom_nav_widget.dart
+          fi
           
           flutter pub get
 
