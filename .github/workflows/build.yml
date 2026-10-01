@@ -23,34 +23,21 @@ jobs:
           flutter-version: '3.19.x'
           channel: 'stable'
 
-      - name: Re-generate Android Files, Fix Imports & Configure Gradle
+      - name: Re-generate Android Files & Prepare Code
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          # 1. إعادة إنشاء إعدادات أندرويد المتوافقة مع اسم الحزمة
           flutter create . --platforms=android --project-name fajr_al_sham
           
-          # 2. إنشاء المجلد وحقن ملف Google Services
           mkdir -p android/app
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
             echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           fi
           
-          # 3. تعديل minSdkVersion إلى 21 لتوافق حزم Firebase تلقائياً
-          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' android/app/build.gradle
           sed -i 's/minSdkVersion [0-9]*/minSdkVersion 21/g' android/app/build.gradle
-          
-          # 4. إصلاح كافة الاستيرادات المطلقة من FlutterFlow
           find lib/ -type f -name "*.dart" -exec sed -i "s|import '/|import 'package:fajr_al_sham/|g" {} +
           
-          # 5. تنزيل الحزم
           flutter pub get
 
-      - name: Build Release APK
-        run: flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Build Release APK Detailed
+        run: flutter build apk --release --verbose
