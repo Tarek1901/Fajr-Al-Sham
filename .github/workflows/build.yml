@@ -36,13 +36,7 @@ jobs:
           
           sed -i 's/minSdkVersion .*/minSdkVersion 21/g' android/app/build.gradle
 
-          # 1. تنزيل التبعيات الأساسية قبل التعديل
-          flutter pub get
-          
-          # 2. إصلاح الاستيرادات المطلقة التي تبدأ بـ import '/lib/' أو import '/flutter_flow/' فقط
-          find lib/ -type f -name "*.dart" -exec sed -i 's|import '\''/|import '\''package:fajr_al_sham/|g' {} +
-
-          # 3. إنشاء ملف الترقيع الشامل لدوال wrapWithModel و safeSetState
+          # 1. إنشاء ملف الترقيع الشامل لدوال wrapWithModel و safeSetState مرة واحدة فقط
           mkdir -p lib/flutter_flow
           cat << 'EOF' > lib/flutter_flow/global_fixes.dart
           import 'package:flutter/material.dart';
@@ -66,7 +60,7 @@ jobs:
           }
           EOF
 
-          # 4. تجميع كافة المكونات المتاحة
+          # 2. تجميع كافة المكونات الداخلية بملف واحد
           if [ -d "lib/components" ]; then
             echo "// Export all components" > lib/components/all_components.dart
             find lib/components/ -type f -name "*.dart" ! -name "all_components.dart" | while read comp; do
@@ -75,8 +69,13 @@ jobs:
             done
           fi
 
-          # 5. حقن ملفات الترقيع والمكونات بأول ملفات المشروع فقط
+          # 3. تنظيف أي استيرادات سابقة وحقن الاستيرادات الجديدة بذكاء بدون تكرار
           find lib/ -type f -name "*.dart" ! -name "global_fixes.dart" ! -name "all_components.dart" | while read file; do
+            # إزالة الأسطر القديمة إن وجدت لمنع التكرار
+            sed -i '/global_fixes.dart/d' "$file"
+            sed -i '/all_components.dart/d' "$file"
+            
+            # حقن الاستيرادات المطلوبة في أعلى الملف تماماً
             tmp_file=$(mktemp)
             echo "import 'package:fajr_al_sham/flutter_flow/global_fixes.dart';" > "$tmp_file"
             if [[ "$file" == lib/components/* ]]; then
@@ -86,7 +85,7 @@ jobs:
             mv "$tmp_file" "$file"
           done
 
-          # 6. إعداد الأيقونة
+          # 4. إعداد الأيقونة
           IMAGE_PATH=""
           if [ -f app_logo.png.jpg ]; then
             IMAGE_PATH="app_logo.png.jpg"
