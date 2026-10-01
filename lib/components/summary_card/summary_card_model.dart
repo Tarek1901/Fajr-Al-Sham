@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';
 
 class SummaryCardModel extends FlutterFlowModel<Widget> {
   @override
