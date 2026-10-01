@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   try {
-    await initFirebase();
+    await Firebase.initializeApp();
   } catch (e) {
     print("Firebase init failed: $e");
   }
+
   runApp(const MyApp());
 }
 
