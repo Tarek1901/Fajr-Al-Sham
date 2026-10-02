@@ -2,38 +2,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'bottom_nav_model.dart';
-export 'bottom_nav_model.dart';
 
-class BottomNavWidget extends StatefulWidget {
+class BottomNavWidget extends StatelessWidget {
   const BottomNavWidget({super.key});
-
-  @override
-  State<BottomNavWidget> createState() => _BottomNavWidgetState();
-}
-
-class _BottomNavWidgetState extends State<BottomNavWidget> {
-  late BottomNavModel _model;
-
-  @override
-  void setState(VoidCallback callback) {
-    super.setState(callback);
-    _model.onUpdate();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => BottomNavModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
-  }
-
-  @override
-  void dispose() {
-    _model.maybeDispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +33,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                // تم تفريغ الحدث مؤقتاً لتجنب أخطاء البناء، يمكنك ربطه لاحقاً من FlutterFlow
+                // يمكنك إضافة الحدث لاحقاً أو ربطه من FlutterFlow
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
