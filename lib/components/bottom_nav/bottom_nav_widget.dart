@@ -1,7 +1,5 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-// التأكد من استيراد الصفحة الرئيسية بالمجلد الصحيح
-import '/pages/home_dashboard/home_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'bottom_nav_model.dart';
@@ -64,12 +62,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeDashboardWidget(),
-                  ),
-                );
+                // تم تفريغ الحدث مؤقتاً لتجنب أخطاء البناء، يمكنك ربطه لاحقاً من FlutterFlow
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
