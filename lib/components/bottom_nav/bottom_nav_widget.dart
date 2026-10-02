@@ -10,7 +10,7 @@ class BottomNavWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 80,
+      height: 75,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [
@@ -27,33 +27,102 @@ class BottomNavWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                // يمكنك إضافة الحدث لاحقاً أو ربطه من FlutterFlow
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.home_rounded,
-                    color: FlutterFlowTheme.of(context).primary,
-                    size: 28,
-                  ),
-                  Text(
-                    'الرئيسية',
-                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                          fontFamily: 'Inter',
-                          color: FlutterFlowTheme.of(context).primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ],
+            // زر الرئيسية
+            Expanded(
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  // يمكنك إضافة انتقال هنا إذا أردت
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.home_rounded,
+                      color: FlutterFlowTheme.of(context).primary,
+                      size: 26,
+                    ),
+                    Text(
+                      'الرئيسية',
+                      style: FlutterFlowTheme.of(context).bodySmall.override(
+                            fontFamily: 'Inter',
+                            color: FlutterFlowTheme.of(context).primary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // زر الخدمات / الاستثمار (مثال على زر إضافي لتكتمل القائمة)
+            Expanded(
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  // الحدث عند الضغط
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet_rounded,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 26,
+                    ),
+                    Text(
+                      'الحساب',
+                      style: FlutterFlowTheme.of(context).bodySmall.override(
+                            fontFamily: 'Inter',
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // زر الملف الشخصي / الإعدادات
+            Expanded(
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  // الحدث عند الضغط
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.person_rounded,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 26,
+                    ),
+                    Text(
+                      'حسابي',
+                      style: FlutterFlowTheme.of(context).bodySmall.override(
+                            fontFamily: 'Inter',
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
