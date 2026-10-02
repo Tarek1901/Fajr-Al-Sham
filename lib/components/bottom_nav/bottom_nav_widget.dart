@@ -1,8 +1,10 @@
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/home_dashboard/home_dashboard_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
-import 'package:fajr_al_sham/flutter_flow/flutter_flow_util.dart';
-// استيراد صفحة الرئيسية الحقيقية (تأكد أن المسار يطابق مكان حفظ الملف لديك)
-import 'package:fajr_al_sham/pages/home_dashboard/home_dashboard_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'bottom_nav_model.dart';
+export 'bottom_nav_model.dart';
 
 class BottomNavWidget extends StatefulWidget {
   const BottomNavWidget({super.key});
@@ -12,50 +14,88 @@ class BottomNavWidget extends StatefulWidget {
 }
 
 class _BottomNavWidgetState extends State<BottomNavWidget> {
-  int _currentIndex = 0;
+  late BottomNavModel _model;
 
-  // قائمة الصفحات المعروضة عند الضغط على الأزرار بالسفلي
-  final List<Widget> _pages = [
-    const HomeDashboardWidget(), // صفحتك الحقيقية الأولى من الفلاتر فلو
-    const Center(
-      child: Text(
-        'صفحة الاستثمار',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-    ), // صفحة مؤقتة ريثما تنسخ واجهة الاستثمار
-    const Center(
-      child: Text(
-        'صفحة الحساب',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-    ), // صفحة مؤقتة ريثما تنسخ واجهة الحساب
-  ];
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => BottomNavModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex], // يعرض الصفحة الحالية حسب اختيارك من الشريط
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'الرئيسية',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'الاستثمار',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'الحساب',
-          ),
+    return Container(
+      width: double.infinity,
+      height: 80,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 4,
+            color: Color(0x33000000),
+            offset: Offset(0, -2),
+          )
         ],
+      ),
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // زر الانتقال للـ Home Dashboard (تم إزالة const لتجنب الخطأ)
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeDashboardWidget(),
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.home_rounded,
+                    color: FlutterFlowTheme.of(context).primary,
+                    size: 28,
+                  ),
+                  Text(
+                    'الرئيسية',
+                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                          fontFamily: 'Inter',
+                          color: FlutterFlowTheme.of(context).primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // يمكنك إضافة باقي أزرار التنقل السفلي هنا حسب تصميم مشروعك
+          ],
+        ),
       ),
     );
   }
