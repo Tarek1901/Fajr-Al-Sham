@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+// التأكد من استيراد الصفحة الرئيسية بالمجلد الصحيح
 import '/pages/home_dashboard/home_dashboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,14 +58,13 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // زر الانتقال للـ Home Dashboard (تم إزالة const لتجنب الخطأ)
             InkWell(
               splashColor: Colors.transparent,
               focusColor: Colors.transparent,
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomeDashboardWidget(),
@@ -92,8 +92,6 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
                 ],
               ),
             ),
-            
-            // يمكنك إضافة باقي أزرار التنقل السفلي هنا حسب تصميم مشروعك
           ],
         ),
       ),
