@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../home_dashboard/home_dashboard_widget.dart';
 
 class RegisterWidget extends StatefulWidget {
@@ -21,29 +22,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // دالة إرسال رابط التحقق إلى البريد الإلكتروني
-  Future<void> _sendEmailVerification(String idToken) async {
-    const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
-    final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$apiKey');
-
-    try {
-      await http.post(
-        url,
-        body: jsonEncode({
-          'requestType': 'VERIFY_EMAIL',
-          'idToken': idToken,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-    } catch (e) {
-      print('خطأ في إرسال رابط التحقق: $e');
-    }
+  // حفظ الجلسة محلياً
+  Future<void> _saveSession(String localId, String idToken) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('localId', localId);
+    await prefs.setString('idToken', idToken);
   }
 
-  // دالة حفظ البيانات الإضافية (الاسم واسم الأب والنسبة) في قاعدة البيانات
+  // دالة حفظ البيانات الشخصية في قاعدة البيانات
   Future<void> _saveUserProfile(String localId, String idToken) async {
-    // يمكنك تعديل هذا الرابط ليتوافق مع قاعدة بياناتك (مثلاً Firestore REST API أو Realtime Database)
-    // هنا مثال على حفظها في Firebase Realtime Database
     final url = Uri.parse('https://fajr-alsham-default-rtdb.firebaseio.com/users/$localId.json?auth=$idToken');
 
     try {
@@ -61,8 +48,20 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     }
   }
 
-  // دالة إنشاء الحساب عبر الـ REST API وتجاوز قيود هواوي
+  // دالة إنشاء الحساب مع التحقق من ملء الحقول
   Future<void> _registerUser() async {
+    // 1. التحقق من أن الحقول غير فارغة
+    if (_firstNameController.text.trim().isEmpty ||
+        _fatherNameController.text.trim().isEmpty ||
+        _lastNameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('الرجاء تعبئة جميع الحقول الشخصية وباقي البيانات'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
     const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
 
@@ -84,16 +83,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         String idToken = responseData['idToken'];
         String localId = responseData['localId'];
 
-        // إرسال رابط التحقق وحفظ البيانات الشخصية
-        await _sendEmailVerification(idToken);
+        // حفظ البيانات وحفظ الجلسة محلياً
         await _saveUserProfile(localId, idToken);
+        await _saveSession(localId, idToken);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('تم إنشاء الحساب بنجاح! تم إرسال رابط التحقق إلى بريدك.'),
+              content: Text('تم إنشاء الحساب بنجاح وتسجيل الدخول!'),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 4),
             ),
           );
           
@@ -144,34 +142,34 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               const Text('أدخل بياناتك الشخصية الأساسية لإنشاء محفظتك', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               const SizedBox(height: 24),
 
-              // حقل الاسم الأول
-              const Text('الاسم الأول', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              // الاسم الأول
+              const Text('الاسم الأول *', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _firstNameController,
-                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: محمد', border: InputBorder.none),
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: طارق', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
 
-              // حقل اسم الأب
-              const Text('اسم الأب', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              // اسم الأب
+              const Text('اسم الأب *', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _fatherNameController,
-                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: أحمد', border: InputBorder.none),
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: جميل', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
 
-              // حقل النسبة / الكنية
-              const Text('النسبة (العائلة)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              // النسبة
+              const Text('النسبة (العائلة) *', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -184,7 +182,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               const SizedBox(height: 16),
 
               // البريد الإلكتروني
-              const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const Text('البريد الإلكتروني *', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -197,7 +195,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               const SizedBox(height: 16),
 
               // كلمة المرور
-              const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const Text('كلمة المرور *', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
