@@ -84,7 +84,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // بطاقة المعلومات الشخصية العلوية
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -172,8 +171,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-
-                  // قسم إعدادات الحساب
                   Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: Padding(
@@ -208,8 +205,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-
-                  // قسم التفضيلات
                   Align(
                     alignment: AlignmentDirectional.centerStart,
                     child: Padding(
@@ -244,8 +239,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     ),
                   ),
                   const SizedBox(height: 30.0),
-
-                  // تنويه النسخة التجريبية
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -291,6 +284,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   Widget _buildSettingsTile(BuildContext context, IconData icon, String title, String subtitle) {
     return Padding(
+      ,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         children: [
