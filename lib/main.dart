@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
-import 'package:fajr_al_sham/index.dart'; // لتضمين جميع صفحات التطبيق
+// قم باستيراد صفحة الرئيسية مباشرة (تأكد من مسار الملف الصحيح لديك)
+import 'package:fajr_al_sham/pages/home_dashboard/home_dashboard_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,6 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: false,
       ),
       themeMode: _themeMode,
-      // التعديل هنا: جعل الصفحة الرئيسية هي HomeDashboardWidget بدلاً من BottomNavWidget التالفة
       home: const HomeDashboardWidget(),
     );
   }
