@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../profile/profile_widget.dart'; // استدعاء شاشة الملف الشخصي
 
 class HomeDashboardWidget extends StatelessWidget {
   const HomeDashboardWidget({super.key});
@@ -249,10 +250,52 @@ class HomeDashboardWidget extends StatelessWidget {
                 mainAxisSpacing: 16,
                 childAspectRatio: 2.2,
                 children: [
-                  _buildQuickAccessCard(context, 'المشاريع', Icons.business_center_outlined, const Color(0xFF0F766E)),
-                  _buildQuickAccessCard(context, 'مساهماتي', Icons.pie_chart_outline, Colors.blue),
-                  _buildQuickAccessCard(context, 'المحفظة', Icons.account_balance_wallet_outlined, Colors.orange),
-                  _buildQuickAccessCard(context, 'الملف الشخصي', Icons.person_outline, Colors.purple),
+                  _buildQuickAccessCard(
+                    context,
+                    title: 'المشاريع',
+                    icon: Icons.business_center_outlined,
+                    color: const Color(0xFF0F766E),
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('قسم المشاريع الاستثمارية')),
+                      );
+                    },
+                  ),
+                  _buildQuickAccessCard(
+                    context,
+                    title: 'مساهماتي',
+                    icon: Icons.pie_chart_outline,
+                    color: Colors.blue,
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('قسم مساهماتي')),
+                      );
+                    },
+                  ),
+                  _buildQuickAccessCard(
+                    context,
+                    title: 'المحفظة',
+                    icon: Icons.account_balance_wallet_outlined,
+                    color: Colors.orange,
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('قسم المحفظة')),
+                      );
+                    },
+                  ),
+                  _buildQuickAccessCard(
+                    context,
+                    title: 'الملف الشخصي',
+                    icon: Icons.person_outline,
+                    color: Colors.purple,
+                    onTap: () {
+                      // الانتقال المباشر لشاشة الملف الشخصي
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ProfileWidget()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -285,8 +328,10 @@ class HomeDashboardWidget extends StatelessWidget {
               const SnackBar(content: Text('قسم المشاريع الاستثمارية')),
             );
           } else if (index == 2) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('صفحة الحساب الشخصي')),
+            // الانتقال أيضاً عند الضغط من شريط التنقل السفلي
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileWidget()),
             );
           }
         },
@@ -294,14 +339,16 @@ class HomeDashboardWidget extends StatelessWidget {
     );
   }
 
-  // دالة مساعدة لإنشاء بطاقات الوصول السريع بشكل أنيق
-  Widget _buildQuickAccessCard(BuildContext context, String title, IconData icon, Color color) {
+  // دالة مساعدة لإنشاء بطاقات الوصول السريع مع دعم الانتقال المخصص
+  Widget _buildQuickAccessCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم الانتقال إلى: $title')),
-        );
-      },
+      onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
