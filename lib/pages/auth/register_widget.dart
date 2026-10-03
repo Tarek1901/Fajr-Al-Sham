@@ -1,30 +1,109 @@
-Future<void> signUpWithEmailDirect(String email, String password) async {
-  const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
-  
-  final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
-  
-  try {
-    final response = await http.post(
-      url,
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'returnSecureToken': true,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-    final responseData = jsonDecode(response.body);
+class RegisterWidget extends StatefulWidget {
+  const RegisterWidget({super.key});
 
-    if (response.statusCode == 200) {
-      // تم إنشاء الحساب بنجاح!
-      print('تم إنشاء الحساب بنجاح');
-      // هنا تنقل المستخدم إلى الشاشة الرئيسية
-    } else {
-      String errorMessage = responseData['error']['message'];
-      print('خطأ في إنشاء الحساب: $errorMessage');
+  @override
+  State<RegisterWidget> createState() => _RegisterWidgetState();
+}
+
+class _RegisterWidgetState extends State<RegisterWidget> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> signUpWithEmailDirect(String email, String password) async {
+    const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
+    final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
+    
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        print('تم إنشاء الحساب بنجاح');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('تم إنشاء الحساب بنجاح!')),
+          );
+        }
+      } else {
+        String errorMessage = responseData['error']['message'] ?? 'حدث خطأ';
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('خطأ: $errorMessage')),
+          );
+        }
+      }
+    } catch (e) {
+      print('خطأ في الاتصال: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('فشل الاتصال بالخادم')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
-  } catch (e) {
-    print('خطأ في الاتصال: $e');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('إنشاء حساب جديد')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'البريد الإلكتروني'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'كلمة المرور'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : () {
+                  signUpWithEmailDirect(
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                  );
+                },
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('إنشاء الحساب الآن'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
