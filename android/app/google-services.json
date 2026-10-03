@@ -1,1 +1,29 @@
-
+{
+  "project_info": {
+    "project_number": "422904245467",
+    "project_id": "fajr-al-sham-1",
+    "storage_bucket": "fajr-al-sham-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422904245467:android:55e286e3d9d94333a670fe",
+        "android_client_info": {
+          "package_name": "com.mycompany.fajralsham"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
