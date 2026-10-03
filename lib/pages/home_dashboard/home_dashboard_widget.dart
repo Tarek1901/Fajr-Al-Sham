@@ -1,40 +1,14 @@
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 
-import 'home_dashboard_model.dart';
-export 'home_dashboard_model.dart';
-
-class HomeDashboardWidget extends StatefulWidget {
+class HomeDashboardWidget extends StatelessWidget {
   const HomeDashboardWidget({super.key});
 
   static String routeName = 'HomeDashboard';
   static String routePath = '/homeDashboard';
 
   @override
-  State<HomeDashboardWidget> createState() => _HomeDashboardWidgetState();
-}
-
-class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
-  late HomeDashboardModel _model;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => HomeDashboardModel());
-  }
-
-  @override
-  void dispose() {
-    _model.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -69,7 +43,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'تم حل مشكلة الشاشة السوداء وتعمل الواجهة بكفاءة عالية',
+                      'تم حل مشكلة الشاشة السوداء والبناء بنجاح تام',
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -78,7 +52,7 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
               ),
               const SizedBox(height: 30),
 
-              // زر تجريبي تفاعلي يظهر رسالة نجاح عند الضغط عليه
+              // زر تجريبي تفاعلي لاختبار اللمس
               ElevatedButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -119,7 +93,6 @@ class _HomeDashboardWidgetState extends State<HomeDashboardWidget> {
           ),
         ],
         onTap: (index) {
-          // التنقل الآمن بدون أخطاء استيراد
           if (index == 1) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('قسم المشاريع')),
