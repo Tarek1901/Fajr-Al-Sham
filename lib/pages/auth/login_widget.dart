@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // أضف هذه المكتبة
+import 'package:firebase_auth/firebase_auth.dart';
 import '../home_dashboard/home_dashboard_widget.dart';
 import 'register_widget.dart';
 
-class LoginWidget extends StatefulWidget { // حولناها لـ StatefulWidget لنقرا المدخلات
+class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
   static String routeName = 'Login';
@@ -14,12 +14,10 @@ class LoginWidget extends StatefulWidget { // حولناها لـ StatefulWidget
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  // معرفات لحقول الإدخال
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // دالة تسجيل الدخول عبر Firebase
   Future<void> _loginUser() async {
     setState(() => _isLoading = true);
     try {
@@ -28,7 +26,6 @@ class _LoginWidgetState extends State<LoginWidget> {
         password: _passwordController.text.trim(),
       );
       
-      // إذا نجح الدخول، انتقل للوحة التحكم
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -36,7 +33,6 @@ class _LoginWidgetState extends State<LoginWidget> {
         );
       }
     } catch (e) {
-      // إظهار رسالة خطأ في حال فشل الدخول
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('خطأ في تسجيل الدخول: ${e.toString()}'), backgroundColor: Colors.red),
       );
@@ -112,7 +108,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: TextField(
-                        controller: _emailController, // ربط المتحكم
+                        controller: _emailController,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)),
                           hintText: 'name@example.com',
@@ -132,7 +128,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: TextField(
-                        controller: _passwordController, // ربط المتحكم
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: const InputDecoration(
                           icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
@@ -143,7 +139,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                     const SizedBox(height: 20),
 
-                    // زر تسجيل الدخول
                     SizedBox(
                       width: double.infinity,
                       height: 50,
