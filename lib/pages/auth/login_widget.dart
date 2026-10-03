@@ -1,12 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // أضف هذه المكتبة
 import '../home_dashboard/home_dashboard_widget.dart';
 import 'register_widget.dart';
 
-class LoginWidget extends StatelessWidget {
+class LoginWidget extends StatefulWidget { // حولناها لـ StatefulWidget لنقرا المدخلات
   const LoginWidget({super.key});
 
   static String routeName = 'Login';
   static String routePath = '/login';
+
+  @override
+  State<LoginWidget> createState() => _LoginWidgetState();
+}
+
+class _LoginWidgetState extends State<LoginWidget> {
+  // معرفات لحقول الإدخال
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  // دالة تسجيل الدخول عبر Firebase
+  Future<void> _loginUser() async {
+    setState(() => _isLoading = true);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      
+      // إذا نجح الدخول، انتقل للوحة التحكم
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
+        );
+      }
+    } catch (e) {
+      // إظهار رسالة خطأ في حال فشل الدخول
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ في تسجيل الدخول: ${e.toString()}'), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +54,6 @@ class LoginWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // القسم العلوي الأخضر مع الشعار
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                 decoration: const BoxDecoration(
@@ -45,54 +81,28 @@ class LoginWidget extends StatelessWidget {
                     const SizedBox(height: 16),
                     const Text(
                       'فجر الشام',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     const Text(
                       'للتطوير والاستثمار',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 30),
-
-              // نموذج تسجيل الدخول
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'تسجيل الدخول',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E293B),
-                      ),
-                    ),
+                    const Text('تسجيل الدخول', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
                     const SizedBox(height: 6),
-                    const Text(
-                      'أدخل بياناتك للوصول إلى محفظتك الاستثمارية',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF64748B),
-                      ),
-                    ),
+                    const Text('أدخل بياناتك للوصول إلى محفظتك الاستثمارية', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                     const SizedBox(height: 24),
 
-                    // حقل البريد أو الهاتف
-                    const Text(
-                      'رقم الهاتف أو البريد الإلكتروني',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
-                    ),
+                    const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -101,22 +111,18 @@ class LoginWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
-                      child: const TextField(
-                        decoration: InputDecoration(
+                      child: TextField(
+                        controller: _emailController, // ربط المتحكم
+                        decoration: const InputDecoration(
                           icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)),
                           hintText: 'name@example.com',
                           border: InputBorder.none,
-                          hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
 
-                    // حقل كلمة المرور
-                    const Text(
-                      'كلمة المرور',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
-                    ),
+                    const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -125,64 +131,40 @@ class LoginWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: _passwordController, // ربط المتحكم
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
                           hintText: '••••••••',
                           border: InputBorder.none,
-                          hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'نسيت كلمة المرور؟',
-                          style: TextStyle(color: Color(0xFF0F766E), fontSize: 13, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    // زر تسجيل الدخول (ينقلك للوحة التحكم الرئيسية)
+                    // زر تسجيل الدخول
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
-                          );
-                        },
+                        onPressed: _isLoading ? null : _loginUser,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0F766E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'تسجيل الدخول',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text('تسجيل الدخول', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    // الانتقال لإنشاء حساب
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'ليس لديك حساب؟',
-                          style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
-                        ),
+                        const Text('ليس لديك حساب؟', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
                         TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -190,35 +172,9 @@ class LoginWidget extends StatelessWidget {
                               MaterialPageRoute(builder: (context) => const RegisterWidget()),
                             );
                           },
-                          child: const Text(
-                            'إنشاء حساب جديد',
-                            style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.bold, fontSize: 13),
-                          ),
+                          child: const Text('إنشاء حساب جديد', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-
-                    // تنبيه نسخة تجريبية أسفل الصفحة
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFBEB),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFFFE3A5)),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.info_outline, color: Color(0xFFD97706), size: 18),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'نسخة تجريبية - جميع البيانات المالية المعروضة هي بيانات وهمية لأغراض العرض فقط',
-                              style: TextStyle(color: Color(0xFFB45309), fontSize: 11),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
