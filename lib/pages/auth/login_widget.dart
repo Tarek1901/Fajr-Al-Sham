@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 Future<void> signInWithEmailDirect(String email, String password) async {
   // مفتاح الـ API الخاص بمشروعك (تستطيع جلبه من ملف google-services.json تحت حقل current_key)
-  const String apiKey = 'ضع_مفتاح_الـ_API_هنا';
+  const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
   
   final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$apiKey');
   
