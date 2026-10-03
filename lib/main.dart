@@ -6,8 +6,12 @@ import 'package:fajr_al_sham/pages/auth/login_widget.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // تهيئة Firebase ليعمل التطبيق مع قاعدة البيانات والمصادقة
-  await Firebase.initializeApp();
+  try {
+    // محاولة تهيئة فايربيز مع معالجة الاستثناء كي لا يتجمد الهاتف لو حدث خطأ
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('خطأ في تهيئة فايربيز: $e');
+  }
   
   await FlutterFlowTheme.initialize();
 
