@@ -38,11 +38,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            borderColor: Colors.transparent,
-            borderRadius: 30.0,
-            borderWidth: 1.0,
-            buttonSize: 60.0,
+          leading: IconButton(
             icon: Icon(
               Icons.arrow_back_rounded,
               color: FlutterFlowTheme.of(context).primaryText,
@@ -108,7 +104,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             ),
                             alignment: Alignment.center,
                             child: Text(
-                              'أر',
+                              'ط',
                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                     fontFamily: 'Readex Pro',
                                     color: FlutterFlowTheme.of(context).primary,
@@ -118,7 +114,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           const SizedBox(height: 12.0),
                           Text(
-                            '[userName]',
+                            'طارق جميل',
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                                   fontFamily: 'Readex Pro',
                                   fontWeight: FontWeight.bold,
@@ -127,7 +123,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            'ahmed.rifai@example.com',
+                            'fajr.alsham@example.com',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                   fontFamily: 'Readex Pro',
                                   color: FlutterFlowTheme.of(context).secondaryText,
@@ -196,11 +192,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     ),
                     child: Column(
                       children: [
-                        _buildSettingsTile(context, Icons.person_outline, 'الاسم الكامل', 'أحمد الرفاعي'),
+                        _buildSettingsTile(context, Icons.person_outline, 'الاسم الكامل', 'طارق جميل شعار'),
                         Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
-                        _buildSettingsTile(context, Icons.email_outlined, 'البريد الإلكتروني', 'ahmed.rifai@example.com'),
+                        _buildSettingsTile(context, Icons.email_outlined, 'البريد الإلكتروني', 'fajr.alsham@example.com'),
                         Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
-                        _buildSettingsTile(context, Icons.calendar_today_outlined, 'تاريخ إنشاء الحساب', 'يناير 2024'),
+                        _buildSettingsTile(context, Icons.calendar_today_outlined, 'تاريخ إنشاء الحساب', 'أكتوبر 2026'),
                       ],
                     ),
                   ),
@@ -261,7 +257,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           const SizedBox(width: 8.0),
                           Expanded(
                             child: Text(
-                              'نسخة تجريبية - جميع البيانات المالية المعروضة هي بيانات وهمية لأغراض العرض فقط.',
+                              'نسخة تطبيق فجر الشام - جميع البيانات المالية المعروضة هي بيانات وهمية لأغراض العرض فقط.',
                               style: FlutterFlowTheme.of(context).bodySmall.override(
                                     fontFamily: 'Readex Pro',
                                     fontSize: 11.0,
