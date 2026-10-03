@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../home_dashboard/home_dashboard_widget.dart';
+import 'register_widget.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
+
+  static String routeName = 'Login';
+  static String routePath = '/login';
 
   @override
   State<LoginWidget> createState() => _LoginWidgetState();
@@ -14,20 +19,18 @@ class _LoginWidgetState extends State<LoginWidget> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> signInWithEmailDirect(String email, String password) async {
+  // دالة الاتصال المباشر لتجاوز قيود أجهزة هواوي
+  Future<void> _loginUser() async {
     const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$apiKey');
-    
-    setState(() {
-      _isLoading = true;
-    });
 
+    setState(() => _isLoading = true);
     try {
       final response = await http.post(
         url,
         body: jsonEncode({
-          'email': email,
-          'password': password,
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text.trim(),
           'returnSecureToken': true,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -36,73 +39,165 @@ class _LoginWidgetState extends State<LoginWidget> {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        String idToken = responseData['idToken'];
-        print('تم تسجيل الدخول بنجاح، الرمز: $idToken');
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم تسجيل الدخول بنجاح!')),
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
           );
         }
       } else {
-        String errorMessage = responseData['error']['message'] ?? 'حدث خطأ';
+        String errorMessage = responseData['error']['message'] ?? 'حدث خطأ في تسجيل الدخول';
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('خطأ: $errorMessage')),
+            SnackBar(content: Text('خطأ: $errorMessage'), backgroundColor: Colors.red),
           );
         }
       }
     } catch (e) {
-      print('خطأ في الاتصال: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('فشل الاتصال بالخادم')),
+          SnackBar(content: Text('فشل الاتصال بالخادم: ${e.toString()}'), backgroundColor: Colors.red),
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('تسجيل الدخول')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'البريد الإلكتروني'),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'كلمة المرور'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : () {
-                  signInWithEmailDirect(
-                    _emailController.text.trim(),
-                    _passwordController.text.trim(),
-                  );
-                },
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('تسجيل الدخول'),
+      backgroundColor: const Color(0xFFF5F7FA),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF0F766E),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.account_balance,
+                        color: Color(0xFF0F766E),
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'فجر الشام',
+                      style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'للتطوير والاستثمار',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('تسجيل الدخول', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                    const SizedBox(height: 6),
+                    const Text('أدخل بياناتك للوصول إلى محفظتك الاستثمارية', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                    const SizedBox(height: 24),
+
+                    const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: TextField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)),
+                          hintText: 'name@example.com',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+                    const SizedBox(height: 8),
+                    Container(codePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
+                          hintText: '••••••••',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _loginUser,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0F766E),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          elevation: 0,
+                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text('تسجيل الدخول', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('ليس لديك حساب؟', style: TextStyle(color: Color(0xFF64748B), fontSize: 13)),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RegisterWidget()),
+                            );
+                          },
+                          child: const Text('إنشاء حساب جديد', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.bold, fontSize: 13)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
