@@ -1,70 +1,334 @@
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// استورد صفحة تسجيل الدخول الخاصة بك هنا، مثلاً:
-// import '../login/login_widget.dart';
+import 'profile_model.dart';
+export 'profile_model.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({super.key});
-
-  static String routeName = 'Profile';
-  static String routePath = '/profile';
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
+  late ProfileModel _model;
 
-  // دالة تسجيل الخروج ومسح الجلسة
-  Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // حذف كافة البيانات المخزنة محلياً (localId و idToken)
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
-    if (mounted) {
-      // الانتقال لصفحة تسجيل الدخول وإزالة كافة الصفحات السابقة من الذاكرة
-      // استبدل LoginWidget() باسم صفحة تسجيل الدخول لديك
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login', // أو استبدلها بـ MaterialPageRoute إذا لم تستخدم المسارات المسمى
-        (route) => false,
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ProfileModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('الملف الشخصي'),
-        backgroundColor: const Color(0xFF0F766E),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ... (باقي محتويات صفحة الملف الشخصي الخاصة بك مثل الاسم والإيميل)
-            
-            const Spacer(),
-
-            // زر تسجيل الخروج
-            ElevatedButton.icon(
-              onPressed: () => _logout(context),
-              icon: const Icon(Icons.logout, color: Colors.white),
-              label: const Text(
-                'تسجيل الخروج',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 24.0,
+            ),
+            onPressed: () async {
+              context.pop();
+            },
+          ),
+          title: Text(
+            'الملف الشخصي',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                  fontFamily: 'Readex Pro',
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  fontSize: 18.0,
+                  letterSpacing: 0.0,
+                  fontWeight: FontWeight.bold,
                 ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
+              child: Icon(
+                Icons.settings_outlined,
+                color: FlutterFlowTheme.of(context).primaryText,
+                size: 24.0,
               ),
             ),
           ],
+          centerTitle: true,
+          elevation: 0.0,
         ),
+        body: SafeArea(
+          top: true,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // بطاقة المعلومات الشخصية العلوية
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).alternate,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: 70.0,
+                            height: 70.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).accent1,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'أر',
+                              style: FlutterFlowTheme.of(context).titleLarge.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    letterSpacing: 0.0,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(height: 12.0),
+                          Text(
+                            '[userName]',
+                            style: FlutterFlowTheme.of(context).titleMedium.override(
+                                  fontFamily: 'Readex Pro',
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.0,
+                                ),
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            'ahmed.rifai@example.com',
+                            style: FlutterFlowTheme.of(context).bodySmall.override(
+                                  fontFamily: 'Readex Pro',
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  letterSpacing: 0.0,
+                                ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Container(
+                            width: double.infinity,
+                            height: 45.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).primaryBackground,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.account_balance_wallet_outlined,
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    size: 18.0,
+                                  ),
+                                  const SizedBox(width: 8.0),
+                                  Text(
+                                    'SHAM-99284 حساب شام كاش المرتبط',
+                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                          fontFamily: 'Readex Pro',
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.0,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+
+                  // قسم إعدادات الحساب
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0, 0, 8.0),
+                      child: Text(
+                        'إعدادات الحساب',
+                        style: FlutterFlowTheme.of(context).labelMedium.override(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).alternate,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingsTile(context, Icons.person_outline, 'الاسم الكامل', 'أحمد الرفاعي'),
+                        Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
+                        _buildSettingsTile(context, Icons.email_outlined, 'البريد الإلكتروني', 'ahmed.rifai@example.com'),
+                        Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
+                        _buildSettingsTile(context, Icons.calendar_today_outlined, 'تاريخ إنشاء الحساب', 'يناير 2024'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+
+                  // قسم التفضيلات
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0, 0, 8.0),
+                      child: Text(
+                        'التفضيلات',
+                        style: FlutterFlowTheme.of(context).labelMedium.override(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).alternate,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingsTile(context, Icons.notifications_none, 'إعدادات التنبيهات', ''),
+                        Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
+                        _buildSettingsTile(context, Icons.language, 'إعدادات اللغة', '(AR) العربية'),
+                        Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
+                        _buildSettingsTile(context, Icons.security_outlined, 'الأمان والخصوصية', ''),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30.0),
+
+                  // تنويه النسخة التجريبية
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).primaryBackground,
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).primary,
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            color: FlutterFlowTheme.of(context).primary,
+                            size: 18.0,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: Text(
+                              'نسخة تجريبية - جميع البيانات المالية المعروضة هي بيانات وهمية لأغراض العرض فقط.',
+                              style: FlutterFlowTheme.of(context).bodySmall.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 11.0,
+                                    letterSpacing: 0.0,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile(BuildContext context, IconData icon, String title, String subtitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: Row(
+        children: [
+          Icon(icon, color: FlutterFlowTheme.of(context).primaryText, size: 20.0),
+          const SizedBox(width: 12.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.0,
+                      ),
+                ),
+                if (subtitle.isNotEmpty) ...[
+                  const SizedBox(height: 2.0),
+                  Text(
+                    subtitle,
+                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          fontSize: 12.0,
+                          letterSpacing: 0.0,
+                        ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: FlutterFlowTheme.of(context).secondaryText,
+            size: 14.0,
+          ),
+        ],
       ),
     );
   }
