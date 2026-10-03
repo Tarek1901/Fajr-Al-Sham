@@ -1,4 +1,4 @@
-name: fajr_al_sham
+Name: fajr_al_sham
 description: A new FlutterFlow project.
 publish_to: 'none'
 version: 1.0.0+1
@@ -23,6 +23,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  image_path: "assets/images/app_icon.PNG"
+  android: true
+  ios: true
 
 flutter:
   uses-material-design: true
