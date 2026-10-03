@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fajr_al_sham/flutter_flow/flutter_flow_theme.dart';
 import 'package:fajr_al_sham/pages/auth/login_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // تهيئة Firebase ليعمل التطبيق مع قاعدة البيانات والمصادقة
+  await Firebase.initializeApp();
+  
   await FlutterFlowTheme.initialize();
 
   runApp(const MyApp());
