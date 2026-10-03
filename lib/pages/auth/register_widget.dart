@@ -1,11 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../home_dashboard/home_dashboard_widget.dart';
 
-class RegisterWidget extends StatelessWidget {
+class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
 
   static String routeName = 'Register';
   static String routePath = '/register';
+
+  @override
+  State<RegisterWidget> createState() => _RegisterWidgetState();
+}
+
+class _RegisterWidgetState extends State<RegisterWidget> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _registerUser() async {
+    setState(() => _isLoading = true);
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ في إنشاء الحساب: ${e.toString()}'), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +49,7 @@ class RegisterWidget extends StatelessWidget {
         backgroundColor: const Color(0xFF0F766E),
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          'إنشاء حساب جديد',
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('إنشاء حساب جديد', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
@@ -27,39 +58,11 @@ class RegisterWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'انضم إلى فجر الشام للاستثمار',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
-              ),
+              const Text('انضم إلى فجر الشام للاستثمار', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
               const SizedBox(height: 6),
-              const Text(
-                'أدخل بياناتك الأساسية لإنشاء محفظتك الاستثمارية',
-                style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-              ),
+              const Text('أدخل بياناتك الأساسية لإنشاء محفظتك الاستثمارية', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               const SizedBox(height: 24),
 
-              // حقل الاسم الكامل
-              const Text('الاسم الكامل', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)),
-                    hintText: 'الاسم الثلاثي',
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // حقل البريد الإلكتروني
               const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
@@ -69,39 +72,17 @@ class RegisterWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.email_outlined, color: Color(0xFF94A3B8)),
                     hintText: 'name@example.com',
                     border: InputBorder.none,
-                    hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
 
-              // حقل رقم الهاتف / شام كاش
-              const Text('رقم الهاتف أو حساب شام كاش', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.phone_outlined, color: Color(0xFF94A3B8)),
-                    hintText: '09xxxxxxxx',
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // حقل كلمة المرور
               const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
@@ -111,41 +92,31 @@ class RegisterWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
-                child: const TextField(
+                child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
                     hintText: '••••••••',
                     border: InputBorder.none,
-                    hintStyle: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
                   ),
                 ),
               ),
               const SizedBox(height: 30),
 
-              // زر تأكيد إنشاء الحساب (ينقلك للرئيسية)
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
-                      (route) => false,
-                    );
-                  },
+                  onPressed: _isLoading ? null : _registerUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF0F766E),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'إنشاء الحساب الان',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('إنشاء الحساب الان', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
               ),
             ],
