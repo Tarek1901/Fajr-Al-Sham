@@ -1,5 +1,5 @@
 Future<void> signUpWithEmailDirect(String email, String password) async {
-  const String apiKey = 'ضع_مفتاح_الـ_API_هنا';
+  const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
   
   final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
   
