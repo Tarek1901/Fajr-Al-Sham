@@ -49,7 +49,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               size: 24.0,
             ),
             onPressed: () async {
-              context.pop();
+              Navigator.pop(context);
             },
           ),
           title: Text(
@@ -284,7 +284,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   Widget _buildSettingsTile(BuildContext context, IconData icon, String title, String subtitle) {
     return Padding(
-      ,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
         children: [
