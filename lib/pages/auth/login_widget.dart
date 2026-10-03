@@ -19,7 +19,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // دالة الاتصال المباشر لتجاوز قيود أجهزة هواوي
   Future<void> _loginUser() async {
     const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$apiKey');
@@ -143,7 +142,8 @@ class _LoginWidgetState extends State<LoginWidget> {
 
                     const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
                     const SizedBox(height: 8),
-                    Container(codePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
