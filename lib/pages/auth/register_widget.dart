@@ -14,11 +14,54 @@ class RegisterWidget extends StatefulWidget {
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _fatherNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // دالة إنشاء الحساب المباشر لتجاوز قيود أجهزة هواوي
+  // دالة إرسال رابط التحقق إلى البريد الإلكتروني
+  Future<void> _sendEmailVerification(String idToken) async {
+    const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
+    final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=$apiKey');
+
+    try {
+      await http.post(
+        url,
+        body: jsonEncode({
+          'requestType': 'VERIFY_EMAIL',
+          'idToken': idToken,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+    } catch (e) {
+      print('خطأ في إرسال رابط التحقق: $e');
+    }
+  }
+
+  // دالة حفظ البيانات الإضافية (الاسم واسم الأب والنسبة) في قاعدة البيانات
+  Future<void> _saveUserProfile(String localId, String idToken) async {
+    // يمكنك تعديل هذا الرابط ليتوافق مع قاعدة بياناتك (مثلاً Firestore REST API أو Realtime Database)
+    // هنا مثال على حفظها في Firebase Realtime Database
+    final url = Uri.parse('https://fajr-alsham-default-rtdb.firebaseio.com/users/$localId.json?auth=$idToken');
+
+    try {
+      await http.put(
+        url,
+        body: jsonEncode({
+          'firstName': _firstNameController.text.trim(),
+          'fatherName': _fatherNameController.text.trim(),
+          'lastName': _lastNameController.text.trim(),
+          'email': _emailController.text.trim(),
+        }),
+      );
+    } catch (e) {
+      print('خطأ في حفظ البيانات الشخصية: $e');
+    }
+  }
+
+  // دالة إنشاء الحساب عبر الـ REST API وتجاوز قيود هواوي
   Future<void> _registerUser() async {
     const String apiKey = 'AIzaSyCkNo6ySEgBWk1c1iet9LQN4KcDVy9wBOI';
     final url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
@@ -38,7 +81,22 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
+        String idToken = responseData['idToken'];
+        String localId = responseData['localId'];
+
+        // إرسال رابط التحقق وحفظ البيانات الشخصية
+        await _sendEmailVerification(idToken);
+        await _saveUserProfile(localId, idToken);
+
         if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم إنشاء الحساب بنجاح! تم إرسال رابط التحقق إلى بريدك.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 4),
+            ),
+          );
+          
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const HomeDashboardWidget()),
@@ -83,46 +141,71 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             children: [
               const Text('انضم إلى فجر الشام للاستثمار', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
               const SizedBox(height: 6),
-              const Text('أدخل بياناتك الأساسية لإنشاء محفظتك الاستثمارية', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+              const Text('أدخل بياناتك الشخصية الأساسية لإنشاء محفظتك', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               const SizedBox(height: 24),
 
-              const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              // حقل الاسم الأول
+              const Text('الاسم الأول', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.email_outlined, color: Color(0xFF94A3B8)),
-                    hintText: 'name@example.com',
-                    border: InputBorder.none,
-                  ),
+                  controller: _firstNameController,
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: محمد', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
 
+              // حقل اسم الأب
+              const Text('اسم الأب', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
+                child: TextField(
+                  controller: _fatherNameController,
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: أحمد', border: InputBorder.none),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // حقل النسبة / الكنية
+              const Text('النسبة (العائلة)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
+                child: TextField(
+                  controller: _lastNameController,
+                  decoration: const InputDecoration(icon: Icon(Icons.badge_outlined, color: Color(0xFF94A3B8)), hintText: 'مثال: الشعار', border: InputBorder.none),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // البريد الإلكتروني
+              const Text('البريد الإلكتروني', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
+                child: TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(icon: Icon(Icons.email_outlined, color: Color(0xFF94A3B8)), hintText: 'name@example.com', border: InputBorder.none),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // كلمة المرور
               const Text('كلمة المرور', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)),
-                    hintText: '••••••••',
-                    border: InputBorder.none,
-                  ),
+                  decoration: const InputDecoration(icon: Icon(Icons.lock_outline, color: Color(0xFF94A3B8)), hintText: '••••••••', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 30),
