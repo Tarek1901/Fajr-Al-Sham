@@ -18,7 +18,7 @@ class HomeDashboardWidget extends StatelessWidget {
             children: [
               // 1. قسم الترحيب العلوي
               Row(
-                mainAxisAlignment: MainAxisAlignment.between,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
