@@ -7,19 +7,10 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // قراءة الاسم والبريد الإلكتروني من الـ App State أو وضع قيم افتراضية
-    final String currentUserName = FFAppState().userName.isNotEmpty 
-        ? FFAppState().userName 
-        : 'المستخدم';
-        
-    final String currentUserEmail = FFAppState().userEmail.isNotEmpty 
-        ? FFAppState().userEmail 
-        : 'fajr.alsham@example.com';
-
-    // استخراج الحرف الأول من الاسم لأجل الأفاتار الدائري
-    final String firstLetter = currentUserName.isNotEmpty 
-        ? currentUserName.substring(0, 1) 
-        : 'ط';
+    // استخدام قيم افتراضية عامة وخالية من الأسماء الشخصية
+    const String currentUserName = 'مستخدم فجر الشام';
+    const String currentUserEmail = 'fajr.alsham@example.com';
+    const String firstLetter = 'م';
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
