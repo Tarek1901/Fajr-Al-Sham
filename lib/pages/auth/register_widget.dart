@@ -150,7 +150,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _firstNameController,
-                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: طارق', border: InputBorder.none),
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: عمر', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
@@ -163,7 +163,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _fatherNameController,
-                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: جميل', border: InputBorder.none),
+                  decoration: const InputDecoration(icon: Icon(Icons.person_outline, color: Color(0xFF94A3B8)), hintText: 'مثال: احمد', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
@@ -176,7 +176,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: TextField(
                   controller: _lastNameController,
-                  decoration: const InputDecoration(icon: Icon(Icons.badge_outlined, color: Color(0xFF94A3B8)), hintText: 'مثال: الشعار', border: InputBorder.none),
+                  decoration: const InputDecoration(icon: Icon(Icons.badge_outlined, color: Color(0xFF94A3B8)), hintText: 'مثال: السعيد', border: InputBorder.none),
                 ),
               ),
               const SizedBox(height: 16),
