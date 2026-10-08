@@ -7,6 +7,20 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // قراءة الاسم والبريد الإلكتروني من الـ App State أو وضع قيم افتراضية
+    final String currentUserName = FFAppState().userName.isNotEmpty 
+        ? FFAppState().userName 
+        : 'المستخدم';
+        
+    final String currentUserEmail = FFAppState().userEmail.isNotEmpty 
+        ? FFAppState().userEmail 
+        : 'fajr.alsham@example.com';
+
+    // استخراج الحرف الأول من الاسم لأجل الأفاتار الدائري
+    final String firstLetter = currentUserName.isNotEmpty 
+        ? currentUserName.substring(0, 1) 
+        : 'ط';
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -80,7 +94,7 @@ class ProfileWidget extends StatelessWidget {
                             ),
                             alignment: Alignment.center,
                             child: Text(
-                              'ط',
+                              firstLetter,
                               style: FlutterFlowTheme.of(context).titleLarge.override(
                                     fontFamily: 'Readex Pro',
                                     color: FlutterFlowTheme.of(context).primary,
@@ -90,7 +104,7 @@ class ProfileWidget extends StatelessWidget {
                           ),
                           const SizedBox(height: 12.0),
                           Text(
-                            'طارق جميل',
+                            currentUserName,
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                                   fontFamily: 'Readex Pro',
                                   fontWeight: FontWeight.bold,
@@ -99,7 +113,7 @@ class ProfileWidget extends StatelessWidget {
                           ),
                           const SizedBox(height: 4.0),
                           Text(
-                            'fajr.alsham@example.com',
+                            currentUserEmail,
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                   fontFamily: 'Readex Pro',
                                   color: FlutterFlowTheme.of(context).secondaryText,
@@ -168,9 +182,9 @@ class ProfileWidget extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        _buildSettingsTile(context, Icons.person_outline, 'الاسم الكامل', 'طارق جميل شعار'),
+                        _buildSettingsTile(context, Icons.person_outline, 'الاسم الكامل', currentUserName),
                         Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
-                        _buildSettingsTile(context, Icons.email_outlined, 'البريد الإلكتروني', 'fajr.alsham@example.com'),
+                        _buildSettingsTile(context, Icons.email_outlined, 'البريد الإلكتروني', currentUserEmail),
                         Divider(height: 1, color: FlutterFlowTheme.of(context).alternate),
                         _buildSettingsTile(context, Icons.calendar_today_outlined, 'تاريخ إنشاء الحساب', 'أكتوبر 2026'),
                       ],
